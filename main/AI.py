@@ -1,7 +1,6 @@
 import subprocess
 import time
 import json
-import asyncio
 
 from models import Model
 
@@ -76,7 +75,6 @@ async def warm_up():
     for m in MODELS:
         await m.warm_up(True)
 
-asyncio.run(warm_up())
 
 MODEL = qwen
 

@@ -1,7 +1,7 @@
 import discord
 import asyncio
 import os
-from AI import generate
+from AI import generate, warm_up
 
 DISCORD_KEY = os.getenv("DISCORD_KEY", "")
 
@@ -11,7 +11,7 @@ intents.message_content = True
 
 class Bot(discord.Client):
     async def on_ready(self):
-
+        await warm_up()
         print(f'Logged in as {self.user}')
 
     async def on_message(self, message: discord.Message):
