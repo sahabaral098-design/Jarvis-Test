@@ -79,5 +79,5 @@ async def warm_up():
 MODEL = qwen
 
 async def generate(query, user= "user", async_response = True):
-    think , response = await qwen.generate_response(query, user, async_response)
+    think , response = await MODEL.generate_response(query, user, async_response)
     return think, response
