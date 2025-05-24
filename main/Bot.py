@@ -1,0 +1,52 @@
+import discord
+import asyncio
+from AI import AI
+import os
+
+DISCORD_KEY = os.getenv("DISCORD_KEY", "")
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+ai = AI()
+
+class Bot(discord.Client):
+    async def on_ready(self):
+        await ai.generate_response("")
+        print("HEATING UP...")
+        print(f'Logged in as {self.user}')
+
+    async def on_message(self, message: discord.Message):
+        if message.author.bot:
+            return
+        
+        # print(f"{message.author.display_name } ({message.author}): {message.content}")
+        att = message.attachments
+        add = ""
+        if att:
+            for a in att:
+                    print(a.filename)
+                    if a.filename.split(".")[-1] in ['py', 'txt']:
+                        print("file detected")
+                        c = await a.read()
+                        decoded = c.decode(errors="ignore")
+                        add = f"(user sent a file which reads:\n{decoded})"
+
+
+        query:str = (add + "\n" + message.content).strip()
+        if not query:
+            return
+        await message.channel.typing()
+        try:
+            response = await ai.generate_response(query)
+            await message.channel.typing()
+
+        except Exception as e:
+            print(f"[Error] {e}")
+            response = f"Oops! Something went wrong. Try again later. (`{e}`)"
+
+        await message.reply(response)
+        # print("AI: " + response)
+
+bot = Bot(intents=intents)
+bot.run(DISCORD_KEY)
