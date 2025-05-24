@@ -31,7 +31,7 @@ class Model:
             self.client.chat(self.ollama_name, message)
         print(f"{self.name} warmed up!")
     
-    async def generate_response(self ,query:str, user = "user", async_client = True):
+    async def generate_response(self, query:str, user = "user", async_client = True):
         if self.system is not None:
             messages = [{'role': "system", "content": self.system}, 
                     {"role":"user", "content": query}]
