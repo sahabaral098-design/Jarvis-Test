@@ -1,7 +1,7 @@
-import ollama
 import subprocess
 import time
 import json
+import asyncio
 
 from models import Model
 
