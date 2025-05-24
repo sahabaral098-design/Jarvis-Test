@@ -3,6 +3,8 @@ import subprocess
 import time
 import json
 
+from models import Model
+
 import requests
 
 MODEL_URL = "hf.co/bartowski/DeepSeek-R1-Distill-Qwen-7B-GGUF:Q4_K_M"
