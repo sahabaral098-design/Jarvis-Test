@@ -41,7 +41,7 @@ class Model:
                 print(response, end="\r")
                 response += part['message']['content']
         else:
-            response = self.client.chat(self.ollama_name).message.content
+            response = self.client.chat(self.ollama_name)['message']['content']
 
         await self.save_context(user,query, response if response else "")
         if response:
