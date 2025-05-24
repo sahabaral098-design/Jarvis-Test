@@ -27,9 +27,11 @@ def wait_for_ollama():
 wait_for_ollama()
 
 example_text = ""
-
-with open("main/saves/examples.json", "r") as f:
-    examples: dict = json.load(f)
+try:
+    with open("main/saves/examples.json", "r") as f:
+        examples: dict = json.load(f)
+except FileNotFoundError:
+    examples = {}
 
 examples = examples.get("examples", [])
 
