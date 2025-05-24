@@ -76,6 +76,3 @@ class Model:
                 return json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
             return {"conversations": []}
-
-def list_models():  
-    return ollama.list()["models"]

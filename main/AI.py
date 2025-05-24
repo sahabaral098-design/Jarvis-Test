@@ -66,4 +66,3 @@ Reply in markdown format
 
 {example_text}
 """
-
