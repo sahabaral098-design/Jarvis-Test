@@ -19,6 +19,8 @@ class Bot(discord.Client):
             return
         
         # print(f"{message.author.display_name } ({message.author}): {message.content}")
+        think = None
+
         att = message.attachments
         add = ""
         if att:

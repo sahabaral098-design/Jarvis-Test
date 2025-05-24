@@ -52,6 +52,7 @@ class Model:
                 thinking = thinking.replace("<think>", "").replace("</think>", "")
             else: 
                 thinking= None
+
         return thinking, response
     
     async def save_context(self, user:str, request:str, response:str, max_len:None|int = None) -> None:
