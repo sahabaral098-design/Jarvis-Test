@@ -7,10 +7,6 @@ from models import Model
 
 import requests
 
-MODEL_URL = "hf.co/bartowski/DeepSeek-R1-Distill-Qwen-7B-GGUF:Q4_K_M"
-
-MODEL = "hf.co/bartowski/DeepSeek-R1-Distill-Qwen-7B-GGUF:Q4_K_M"
-
 subprocess.Popen(["clear"])
 subprocess.Popen(["ollama", "serve"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 time.sleep(1.5)
