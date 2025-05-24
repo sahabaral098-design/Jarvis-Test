@@ -1,6 +1,5 @@
 import ollama 
 import json
-import asyncio
 
 class Model:
     def __init__(self, name, ollama_name, context_path:str, system_prompt:str|None= None, tools= False, thinking= False) -> None:

@@ -1,6 +1,5 @@
 import discord
 import asyncio
-from AI import AI
 import os
 
 DISCORD_KEY = os.getenv("DISCORD_KEY", "")
@@ -8,11 +7,9 @@ DISCORD_KEY = os.getenv("DISCORD_KEY", "")
 intents = discord.Intents.default()
 intents.message_content = True
 
-ai = AI()
 
 class Bot(discord.Client):
     async def on_ready(self):
-        await ai.generate_response("")
         print("HEATING UP...")
         print(f'Logged in as {self.user}')
 
@@ -38,7 +35,7 @@ class Bot(discord.Client):
             return
         await message.channel.typing()
         try:
-            response = await ai.generate_response(query)
+            response = None
             await message.channel.typing()
 
         except Exception as e:
