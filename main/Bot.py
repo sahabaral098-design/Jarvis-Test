@@ -11,7 +11,7 @@ intents.message_content = True
 
 class Bot(discord.Client):
     async def on_ready(self):
-        print("HEATING UP...")
+
         print(f'Logged in as {self.user}')
 
     async def on_message(self, message: discord.Message):
