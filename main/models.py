@@ -23,11 +23,13 @@ class Model:
         ollama.delete(model)
     
     async def warm_up(self, async_model = True):
+        print("Warming up...")
         message = [{'role': 'user', 'content': 'hi'}]
         if async_model:
             await self.async_client.chat(self.ollama_name, message)
         else:
             self.client.chat(self.ollama_name, message)
+        print("Warmed up!")
     
     async def generate_response(self ,query:str, user = "user", async_client = True):
         if self.system is not None:
