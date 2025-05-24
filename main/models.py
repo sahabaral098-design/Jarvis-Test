@@ -38,7 +38,6 @@ class Model:
         response = ''
         if async_client:
             async for part in await self.async_client.chat(model=self.ollama_name, messages=messages, stream=True):
-                print(response, end="\r")
                 response += part['message']['content']
         else:
             response = self.client.chat(self.ollama_name)['message']['content']
