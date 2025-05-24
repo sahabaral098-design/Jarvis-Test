@@ -77,3 +77,9 @@ async def warm_up():
         await m.warm_up(True)
 
 asyncio.run(warm_up())
+
+MODEL = qwen
+
+async def generate(query, user= "user", async_response = True):
+    think , response = await qwen.generate_response(query, user, async_response)
+    return think, response
