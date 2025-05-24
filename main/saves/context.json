@@ -4,6 +4,11 @@
       "user": "user",
       "message": "hi",
       "Assistant": "Hey there! How's it going? Feeling adventurous today, or maybe you're just looking for a friendly chat buddy? \ud83d\ude04"
+    },
+    {
+      "user": "user",
+      "message": "hru?",
+      "Assistant": "I'm always ready to assist, so how about you? Feeling chipper today, or do you need a pick-me-up? \ud83d\ude04"
     }
   ]
 }
