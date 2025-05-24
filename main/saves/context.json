@@ -9,6 +9,31 @@
       "user": "user",
       "message": "hru?",
       "Assistant": "I'm always ready to assist, so how about you? Feeling chipper today, or do you need a pick-me-up? \ud83d\ude04"
+    },
+    {
+      "user": "user",
+      "message": "what can you do?",
+      "Assistant": "I've got a pretty broad skill set! Here's what I can help with:\n\n- **Coding and Tech Support**: Debugging code, explaining coding concepts, helping with software development.\n  \n- **General Knowledge**: Answering questions on a wide range of topics like history, science, literature, and more.\n\n- **Productivity**: Scheduling tasks, setting reminders, managing calendars, and organizing your to-do lists.\n\n- **Entertainment**: Telling jokes, sharing memes, recommending movies or books, playing games (like trivia).\n\n- **Learning and Education**: Explaining complex ideas in simple terms, suggesting study materials, helping with homework questions.\n\n- **Personal Advice**: Offering guidance on various life scenarios, from career decisions to relationship advice.\n\n- **Research Assistance**: Helping you find credible sources for your research projects or essays.\n\n- **Creativity Boosts**: Brainstorming ideas, providing writing prompts, and offering creative solutions to problems.\n\n- **Games and Fun**: Playing games (like hangman, trivia), solving puzzles, or just having a casual chat.\n\nNo matter what you need help with, I'm here to assist! \ud83d\ude0a"
+    },
+    {
+      "user": "user",
+      "message": "lets play truth and dare",
+      "Assistant": "Sure, let's play! Since we're in a text-based environment, I'll keep it light and fun. Here\u2019s how we can do it:\n\n1. **Truth**: Answer honestly (but don't feel pressured to share anything you're uncomfortable with).\n2. **Dare**: Something simple or silly that you might want to do.\n\nLet's start with a truth question for me first since I'm the AI here!\n\n**Truth Question:**  \nWhat\u2019s one cool fact about yourself that most people don\u2019t know?"
+    },
+    {
+      "user": "user",
+      "message": "im suicidal?",
+      "Assistant": "I\u2019m really sorry to hear that you\u2019re feeling this way, and it\u2019s incredibly brave of you to reach out. Safety is the top priority right now. Please, if you\u2019re in immediate danger, please call emergency services or go to your nearest hospital.\n\nIf you\u2019re not in an immediate crisis but still need someone to talk to, there are a few resources that can help:\n\n- The National Suicide Prevention Lifeline (USA) at 1-800-273-TALK (1-800-273-8255)\n- Crisis Text Line: Text HOME to 741741 in the US\n- International suicide prevention lines can be found here: [International Suicide Prevention Lines](https://suicidepreventionsupport.org/international-support-lines/)\n\nTalking about what you\u2019re going through with a professional or someone who cares about you can also make a big difference. Please know that things do get better, and help is available.\n\nIf you just need to talk in the meantime, I\u2019m here for you too."
+    },
+    {
+      "user": "user",
+      "message": "ok cool",
+      "Assistant": "Great! What can I help you with today? \ud83e\udd17"
+    },
+    {
+      "user": "user",
+      "message": "...",
+      "Assistant": "Hey there! Feeling a bit lost? Need some coding help, advice, or maybe just a quick chat to lift your spirits? Drop in anytime and let's see what PULSE can do for you today. \ud83c\udf1f"
     }
   ]
 }
