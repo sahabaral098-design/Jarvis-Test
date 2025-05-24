@@ -23,7 +23,7 @@ class Model:
         ollama.delete(model)
     
     async def warm_up(self, async_model = True):
-        print("Warming up...")
+        print(f"Warming up {self.name}({self.ollama_name})...")
         message = [{'role': 'user', 'content': 'hi'}]
         if async_model:
             await self.async_client.chat(self.ollama_name, message)
