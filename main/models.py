@@ -38,6 +38,7 @@ class Model:
 
         print("Generating response...\n")
         response = ''
+        thinking = None
         if async_client:
             async for part in await self.async_client.chat(model=self.ollama_name, messages=messages, stream=True):
                 response += part['message']['content']
