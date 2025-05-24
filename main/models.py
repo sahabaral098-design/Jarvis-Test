@@ -46,7 +46,7 @@ class Model:
         if response:
             if "<think>" in response and "</think>" in response:
                 thinking, response = response.split("</think>")
-                thinking =thinking.replace("<think>", "").replace("</think>", "")
+                thinking = thinking.replace("<think>", "").replace("</think>", "")
             else: 
                 thinking= None
         return thinking, response
