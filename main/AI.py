@@ -77,17 +77,17 @@ Reply in markdown format
 {example_text}
 """
 
-qwen = Model("Qwen", "qwen2.5:latest","main/saves/context.json", SYSTEM_PROMPT, True, False)
+zephyr = Model("Zephyr", "zephyr:latest","main/saves/context.json", SYSTEM_PROMPT, False, False)
 deepseek_R1 = Model("R1","deepseek-r1:latest","main/saves/context.json",SYSTEM_PROMPT, False, True)
 
-MODELS = [qwen, deepseek_R1]
+MODELS = [zephyr, deepseek_R1]
 
 async def warm_up():
     for m in MODELS:
         await m.warm_up(True)
 
 
-MODEL = qwen
+MODEL = zephyr
 
 async def generate(query, user= "user", async_response = True):
     think , response = await MODEL.generate_response(query, user, async_response)
