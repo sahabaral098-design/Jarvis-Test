@@ -34,6 +34,7 @@ class Model:
                     async with session.post(url, headers=headers, data=json.dumps(data)) as response:
                         response.raise_for_status()
                         await response.json()
+                        self.warmed_up = True
                 
                 print(f"{self.name}({self.ollama_name}) warmed up!")
             else:
@@ -41,8 +42,10 @@ class Model:
                 async with aiohttp.ClientSession() as session:
                     async with session.post(url, headers=headers, data=json.dumps(data)) as response:
                         response.raise_for_status()
-                        
+
                         return await response.json()
                     
         except Exception as e:
-            return f"An error occured: `{e}`"
+            response = f"An error occured: `{e}`"
+            print(f"🟥 [Error]: {response}")
+            return {response: response}
