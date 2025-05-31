@@ -1,0 +1,7 @@
+{
+    "Models":{
+        "zephyr" : {"role": "chat", "name": "Zephyr", "ollama_name": "zephyr", "has_tools": false, "has_CoT": false, "port":0, "system_prompt": ""},
+        "llama_router" : {"role": "route", "name": "Llama-Router", "ollama_name": "llama3.2", "has_tools": true, "has_CoT": false, "port":0, "system_prompt": ""},
+        "llama_summariser" : {"role": "summarise", "name": "Llama-Summarise", "ollama_name": "llama3.2", "has_tools": true, "has_CoT": false, "port":0, "system_prompt": ""}
+    }
+}
