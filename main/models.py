@@ -11,7 +11,7 @@ class Model:
         self.port = port
         self.system = system_prompt
 
-        self.host = f"http://localhost:{self.port}"
+        self.host = f"http://localhost:{self.port}" # For seperate model loading
 
         self.start_command = f"OLLAMA_HOST={self.host} ollama serve"
         
@@ -41,6 +41,8 @@ class Model:
                 async with aiohttp.ClientSession() as session:
                     async with session.post(url, headers=headers, data=json.dumps(data)) as response:
                         response.raise_for_status()
+                        
                         return await response.json()
+                    
         except Exception as e:
             return f"An error occured: `{e}`"
