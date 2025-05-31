@@ -3,19 +3,6 @@ import json
 
 import requests
 
-example_text = ""
-try:
-    with open("main/saves/examples.json", "r") as f: # Load the examples from a json 
-                                                               # REMEMBER: IT NEEDS TO BE REWRITTEN
-        examples: dict = json.load(f)
-except FileNotFoundError:
-    examples = {}
-
-examples = examples.get("examples", [])
-
-for e in examples:
-    example_text += f"User: {e['user']}\nAI: {e['assistant']}\n\n"
-
 SYSTEM_PROMPT: str = f"""
 You are PULSE — full form: Personal Unified Logic System Entity.
 
@@ -52,9 +39,7 @@ Prioritize in this order:
 Important Instructions:
 - ❗If you don't know something, say so — and help the user figure it out logically.
 - 🎯 Prioritize smoothness, confidence, and usefulness over formality.
+
 Reply in markdown format
 
---- EXAMPLES BELOW ---
-
-{example_text}
 """
