@@ -37,6 +37,7 @@ class Model:
                         self.warmed_up = True
                 
                 print(f"{self.name}({self.ollama_name}) warmed up!")
+                return {"response": "Sorry for the delay... I was loading my system!"}
             else:
                 print("Generating response...") # Normal generation
                 async with aiohttp.ClientSession() as session:
@@ -48,4 +49,4 @@ class Model:
         except Exception as e:
             response = f"An error occured: `{e}`"
             print(f"🟥 [Error]: {response}")
-            return {response: response}
+            return {"response": response}
