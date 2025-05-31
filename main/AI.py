@@ -1,7 +1,4 @@
-import time
-import json
-
-import requests
+# A base system prompt for the sake of my sanity, will to live AND to prevent me to lose context
 
 SYSTEM_PROMPT: str = f"""
 You are PULSE — full form: Personal Unified Logic System Entity.
@@ -43,3 +40,14 @@ Important Instructions:
 Reply in markdown format
 
 """
+
+import asyncio
+import subprocess
+from models import Model
+import json
+
+# Sooo... now what?
+
+class AI:
+    def __init__(self, model_config_path= "main/Models_config.json") -> None:
+        pass
