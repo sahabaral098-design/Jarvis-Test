@@ -69,13 +69,13 @@ class Model:
                             return {"response": "An unexpected response format was received from the model."}
                     
         except aiohttp.ClientError as e:
-            print(f"🟥 [ERROR] Connection error for {self.name}: {e}")
+            print(f"🟥 [ERROR] Connection error: {e}")
             return {"response": f"Connection error: {e}"}
         except json.JSONDecodeError:
-            print(f"🟥 [JSON Decode Error for {self.name}]: Invalid JSON response.")
+            print(f"🟥 [Error] JSON decode error: Invalid JSON response.")
             return {"response": "Invalid JSON response from the model."}
         except Exception as e:
-            print(f"🟥 [Generic Error for {self.name}]: {e}")
+            print(f"🟥 [Error]: {e}")
             return {"response": f"An unexpected error occurred: {e}"}
 
 
