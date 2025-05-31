@@ -20,28 +20,27 @@ class Model:
     async def generate_response(self, query:str):
         url = f"{self.host}/api/chat" # For API calling
         headers = {"Content-Type": "application/json"}
+        query = query if self.warmed_up else "hi"
         data = {
             "model": self.ollama_name,
             "messages": [{"role": "system", "content": self.system},{"role": "user", "content": query}],
             "stream": False,
         }
-        if not self.warmed_up:
-            print(f"{self.name}({self.ollama_name}) warming up...") # To prevent Loading lag...
-            query = "hi"
-            data = {
-            "model": self.ollama_name,
-            "messages": [{"role": "system", "content": self.system},{"role": "user", "content": query}],
-            "stream": False,
-            }
-            
-            async with aiohttp.ClientSession() as session:
-                async with session.post(url, headers=headers, data=json.dumps(data)) as response:
-                    response.raise_for_status()
-                    return await response.json()
-        else:
-            print("Generating response...")
-            async with aiohttp.ClientSession() as session:
-                async with session.post(url, headers=headers, data=json.dumps(data)) as response:
-                    response.raise_for_status()
-                    return await response.json()
-
+        try:
+            if not self.warmed_up:
+                print(f"{self.name}({self.ollama_name}) warming up...") # To prevent loading lag...
+                
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(url, headers=headers, data=json.dumps(data)) as response:
+                        response.raise_for_status()
+                        await response.json()
+                
+                print(f"{self.name}({self.ollama_name}) warmed up!")
+            else:
+                print("Generating response...") # Normal generation
+                async with aiohttp.ClientSession() as session:
+                    async with session.post(url, headers=headers, data=json.dumps(data)) as response:
+                        response.raise_for_status()
+                        return await response.json()
+        except Exception as e:
+            return f"An error occured: `{e}`"
