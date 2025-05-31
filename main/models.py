@@ -21,7 +21,10 @@ class Model:
 
         # ---- Ollama setup ----
 
-        subprocess.Popen(["ollama ", "serve"])
+        subprocess.Popen(["ollama", "serve"],  stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+
+        for model in models_config: print(model)
+        
 
 if __name__ == "__main__": # TEST
     test = Model()
