@@ -1,5 +1,4 @@
 import discord
-import asyncio
 import os
 
 DISCORD_KEY = os.getenv("DISCORD_KEY", "")
@@ -50,6 +49,7 @@ class Bot(discord.Client):
         else: # Debuger
             await message.channel.send("-# NO THINKING")
         # print("AI: " + response)
+
 
 bot = Bot(intents=intents)
 bot.run(DISCORD_KEY)
