@@ -50,7 +50,7 @@ from utils import save_memory, load_memory
 # Sooo... now what?
 
 class AI:
-    def __init__(self, model_config_path= "main/Models_config.json",context_path="main/saves/context.json",) -> None:
+    def __init__(self, model_config_path= "main/Models_config.json",context_path="main/saves/context.json", memory_path = "main/saves/memory.json") -> None:
         self.model_config_path = model_config_path
         self.context_path = context_path
         self.models = dict()
@@ -58,8 +58,11 @@ class AI:
              None
         ]
 
-    def load_context(self): pass 
+    def load_context(self): 
+        pass 
     
-    def save_context(self): pass
+    def save_context(self): 
+        pass
 
-    def load_models(self): pass
+    def load_models(self): 
+        pass
