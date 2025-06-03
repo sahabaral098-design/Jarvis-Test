@@ -9,15 +9,14 @@ def save_memory():
 def load_memory():
     pass
 
-async def spinny_thingy(tasks:list[str]):
+async def spinny_thingy(task):
     chars = ["-", "\\", "|", '/']
 
     done = False
 
     def spinny():
-        for i in cycle(chars):
+        for char in cycle(chars):
             if done:
                 break
 
-            print(f"{tasks}")
-
+            print(f"{task} {char}",flush=True, end="\r")
