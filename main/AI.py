@@ -45,9 +45,21 @@ import asyncio
 import subprocess
 from models import Model
 import json
+from utils import save_memory, load_memory
 
 # Sooo... now what?
 
 class AI:
-    def __init__(self, model_config_path= "main/Models_config.json") -> None:
-        pass
+    def __init__(self, model_config_path= "main/Models_config.json",context_path="main/saves/context.json",) -> None:
+        self.model_config_path = model_config_path
+        self.context_path = context_path
+        self.models = dict()
+        self.tools = [
+             None
+        ]
+
+    def load_context(self): pass 
+    
+    def save_context(self): pass
+
+    def load_models(self): pass
