@@ -3,45 +3,13 @@ from datetime import datetime
 import asyncio
 import json
 from itertools import cycle
-import colorama
-import sys
-
-colorama.init(True)
+from spin import Spinner
 
 def save_memory():
     pass
 
 def load_memory():
     pass
-
-class Spinner:
-    def __init__(self, text) -> None:
-        self.done = asyncio.Event()
-        self.text = text
-        self.chars = ["-", "\\", "|", '/']
-
-    async def spinny_thingy(self, color = colorama.Fore.LIGHTCYAN_EX):
-
-        sys.stdout.write(" " * len(self.text) + '\r')
-        while not self.done.is_set():
-            for i in cycle(self.chars):
-                if self.done.is_set():
-                    break
-
-                sys.stdout.write(f"{color}{self.text} {i}\r{colorama.Fore.RESET}")
-                sys.stdout.flush()
-                await asyncio.sleep(0.1)
-
-            sys.stdout.write(" " * len(self.text) + '\r')
-
-    def set_done(self):
-        self.done.set()
-
-    def change_text(self, new_text):
-        sys.stdout.write(" " * len(self.text) + '\r')
-        sys.stdout.flush()
-        self.text = new_text
-
 
 async def main():
     done = asyncio.Event()
