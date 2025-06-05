@@ -106,7 +106,7 @@ class AI:
             await model.session.close() # type: ignore
 
     def load_context(self): 
-        pass 
+        pass
     
     def save_context(self): 
         pass

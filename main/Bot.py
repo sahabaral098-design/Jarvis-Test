@@ -1,15 +1,17 @@
 import discord
 import os
+from AI import AI
+import asyncio
 
 DISCORD_KEY = os.getenv("DISCORD_KEY", "")
 
 intents = discord.Intents.default()
 intents.message_content = True
 
+ai = AI()
 
 class Bot(discord.Client):
     async def on_ready(self):
-
         print(f'Logged in as {self.user}')
 
     async def on_message(self, message: discord.Message):
@@ -50,6 +52,14 @@ class Bot(discord.Client):
             await message.channel.send("-# NO THINKING")
         # print("AI: " + response)
 
+async def main():
+    try:
+        bot = Bot(intents=intents)
+        bot.run(DISCORD_KEY)
+    except Exception as e:
+        print(f"An Error occured: {e}")
+    finally:
+        await ai.shut_down()
 
-bot = Bot(intents=intents)
-bot.run(DISCORD_KEY)
+asyncio.run(main())
+    
