@@ -54,9 +54,19 @@ class AI:
         self.model_config_path = model_config_path
         self.context_path = context_path
         self.models = dict()
+
         self.tools = [
              None
         ]
+
+        models = self.load_models()
+        # print(models)
+        if models is not None:
+            for model in models:
+                self.models[model["name"]] = Model(**model) # type: ignore
+        else:
+            print("🟥 NO MODELS FOUND exiting...")
+            exit(1)
 
     def load_context(self): 
         pass 
@@ -64,7 +74,17 @@ class AI:
     def save_context(self): 
         pass
 
-    def load_models(self): 
-        pass
-    
-    
+    def load_models(self) : 
+        try:
+            with open(self.model_config_path, 'r') as f:
+                return json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            print(f"🟥 File Error: {e}")
+        except Exception as e:
+            print(f"An error occured: {e}")
+
+        return None
+
+
+if __name__ == "__main__":
+    ai = AI()
