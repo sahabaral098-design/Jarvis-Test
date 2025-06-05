@@ -2,7 +2,6 @@ import requests
 from datetime import datetime
 import asyncio
 import json
-from itertools import cycle
 from spin import Spinner
 
 def save_memory():
