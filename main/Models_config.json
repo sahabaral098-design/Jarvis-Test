@@ -1,6 +1,5 @@
-{
-    "Models":{
-        "zephyr" : {
+[
+    {
         "role": "chat", 
         "name": "Zephyr", 
         "ollama_name": "zephyr", 
@@ -11,7 +10,7 @@
     },
 
 
-        "llama_router" : {
+    {
         "role": "route", 
         "name": "Llama-Router",
         "ollama_name": "llama3.2", 
@@ -22,7 +21,7 @@
     },
 
 
-        "llama_summariser" : {
+    {
         "role": "summarise", 
         "name": "Llama-Summarise", 
         "ollama_name": "llama3.2", 
@@ -31,5 +30,4 @@
         "port":10540, 
         "system_prompt": ""
     }
-    }
-}
+]
