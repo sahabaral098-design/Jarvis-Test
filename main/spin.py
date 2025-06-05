@@ -12,7 +12,6 @@ class Spinner:
         sys.stdout.write(colorama.Fore.RESET + colorama.Back.RESET + "\r")
 
     async def spinny_thingy(self, color = colorama.Fore.LIGHTCYAN_EX):
-
         sys.stdout.write(" " * len(self.text) + '\r')
         while not self.done.is_set():
             for i in cycle(self.chars):
