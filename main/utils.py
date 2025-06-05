@@ -18,13 +18,13 @@ class Spinner:
     def __init__(self, text) -> None:
         self.done = asyncio.Event()
         self.text = text
+        self.chars = ["-", "\\", "|", '/']
 
     async def spinny_thingy(self, color = colorama.Fore.LIGHTCYAN_EX):
-        chars = ["-", "\\", "|", '/']
 
         sys.stdout.write(" " * len(self.text) + '\r')
         while not self.done.is_set():
-            for i in cycle(chars):
+            for i in cycle(self.chars):
                 if self.done.is_set():
                     break
 
@@ -38,6 +38,8 @@ class Spinner:
         self.done.set()
 
     def change_text(self, new_text):
+        sys.stdout.write(" " * len(self.text) + '\r')
+        sys.stdout.flush()
         self.text = new_text
 
 
