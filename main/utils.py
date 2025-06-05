@@ -14,30 +14,45 @@ def save_memory():
 def load_memory():
     pass
 
-async def spinny_thingy(task:str, done:asyncio.Event, color = colorama.Fore.LIGHTCYAN_EX):
-    chars = ["-", "\\", "|", '/']
+class Spinner:
+    def __init__(self, text) -> None:
+        self.done = asyncio.Event()
+        self.text = text
 
-    while not done.is_set():
-        for i in cycle(chars):
-            if done.is_set():
-                break
+    async def spinny_thingy(self, color = colorama.Fore.LIGHTCYAN_EX):
+        chars = ["-", "\\", "|", '/']
 
-            sys.stdout.write(f"{color}{task} {i}\r{colorama.Fore.RESET}")
-            sys.stdout.flush()
-            await asyncio.sleep(0.1)
+        sys.stdout.write(" " * len(self.text) + '\r')
+        while not self.done.is_set():
+            for i in cycle(chars):
+                if self.done.is_set():
+                    break
 
-        sys.stdout.write(" " * len(task) + '\r')
+                sys.stdout.write(f"{color}{self.text} {i}\r{colorama.Fore.RESET}")
+                sys.stdout.flush()
+                await asyncio.sleep(0.1)
+
+            sys.stdout.write(" " * len(self.text) + '\r')
+
+    def set_done(self):
+        self.done.set()
+
+    def change_text(self, new_text):
+        self.text = new_text
 
 
 async def main():
     done = asyncio.Event()
-    spinner_task = asyncio.create_task(spinny_thingy("⚙️  Spinning up Pulse AI...", done))
+    s = Spinner("⚙️  Spinning up Pulse AI...")
+    spinner_task = asyncio.create_task(s.spinny_thingy())
 
-    # Fake setup simulating your actual main
     from models import main as pulse_main
+
+    await pulse_main()
+    s.change_text("NEW")
     await pulse_main()
 
-    done.set()
+    s.set_done()
     await spinner_task
     print("✅ Spinny done!\n")
 
