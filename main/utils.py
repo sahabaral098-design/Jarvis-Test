@@ -11,7 +11,6 @@ def load_memory():
     pass
 
 async def main():
-    done = asyncio.Event()
     s = Spinner("⚙️  Spinning up Pulse AI...")
     spinner_task = asyncio.create_task(s.spinny_thingy())
 
