@@ -97,19 +97,39 @@ async def wait_until_ready(url: str, timeout: int = 20):
     raise TimeoutError(f"🟥 Ollama server did not start in time.")
 
 
-async def main(): # Testing
-    m = Model("Testing", "Test", "llama3.2", True, False, 11434, "")
-    subprocess.Popen(m.start_command, env=m.ollama_env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
-    await wait_until_ready(m.host) 
+async def main():  # Testing, models.py
+    prompts = [
+        "Hi",
+        "whats your name",
+        "who made you?",
+        "",
+        "bye"
+    ]
 
-    if not  m.warmed_up: await m.generate_response("")
-    for d in range(5):
-        res = await m.generate_response(input(">>> "))
-        print(res["response"])
+    m1 = Model("Testing", "Test", "llama3.2", True, False, 11434, "")
+    m2 = Model("Testing2", "Test2", "llama3.2", True, False, 11435, "")
+    ms = [m1, m2]
 
-    await m.session.close() # type: ignore
+    # Start servers only once
+    for m in ms:
+        subprocess.Popen(m.start_command, env=m.ollama_env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+        await wait_until_ready(m.host)
+        if not m.warmed_up:
+            await m.generate_response("WARMING UP")
+
+    # Loop through prompts
+    for r in prompts:
+        for m in ms:
+            res = await m.generate_response(r)
+            print(f"prompt: {r}\nresponse ({m.name}): {res['response']}")
+
+    # Close sessions at the end
+    for m in ms:
+        await m.session.close()  # type: ignore
+
 
 
 if __name__ == "__main__":
 
     asyncio.run(main())
+    
