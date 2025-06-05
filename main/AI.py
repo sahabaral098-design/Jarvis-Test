@@ -43,17 +43,35 @@ Reply in markdown format
 
 import asyncio
 import subprocess
+import aiohttp
 from models import Model
 import json
 from utils import save_memory, load_memory
 
 # Sooo... now what?
 
+async def wait_until_ready(url: str, timeout: int = 20):
+    print("Waiting for Ollama to be ready...")
+    for i in range(timeout):
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(f"{url}/api/tags") as res:
+                    if res.status == 200:
+                        print("🟩 Ollama is ready!")
+                        return True
+        except:
+            print(f"Reties: {i+1} / {timeout}")
+            pass
+        await asyncio.sleep(1)
+    raise TimeoutError(f"🟥 Ollama server did not start in time.")
+
 class AI:
     def __init__(self, model_config_path= "main/Models_config.json",context_path="main/saves/context.json", memory_path = "main/saves/memory.json") -> None:
         self.model_config_path = model_config_path
         self.context_path = context_path
-        self.models = dict()
+        self.memory_path = memory_path
+        self.models :dict[str,Model] = dict()
+        self.processes:list[subprocess.Popen] = []
 
         self.tools = [
              None
@@ -63,10 +81,29 @@ class AI:
         # print(models)
         if models is not None:
             for model in models:
-                self.models[model["name"]] = Model(**model) # type: ignore
+                self.models[model["name"]] = Model(**model)
         else:
             print("🟥 NO MODELS FOUND exiting...")
             exit(1)
+
+    async def generate(self, query):
+        async def warm_up(name, model:Model):
+            print(f"🟨 Warming Up {name}...")
+            self.processes.append(subprocess.Popen(
+                model.start_command, env=model.ollama_env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
+            ))
+            await wait_until_ready(model.host)
+        
+        for name, model in self.models.items():
+            if not model.warmed_up: await warm_up(name, model)
+
+        ...
+
+    async def shut_down(self):
+        for p in self.processes:
+            p.terminate()
+        for model in self.models.values():
+            await model.session.close() # type: ignore
 
     def load_context(self): 
         pass 
@@ -76,7 +113,7 @@ class AI:
 
     def load_models(self) : 
         try:
-            with open(self.model_config_path, 'r') as f:
+            with open(self.model_config_path, 'r', encoding="utf-8") as f:
                 return json.load(f)
         except (FileNotFoundError, json.JSONDecodeError) as e:
             print(f"🟥 File Error: {e}")
@@ -84,7 +121,6 @@ class AI:
             print(f"An error occured: {e}")
 
         return None
-
 
 if __name__ == "__main__":
     ai = AI()
