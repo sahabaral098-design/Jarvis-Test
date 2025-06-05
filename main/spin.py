@@ -9,6 +9,7 @@ class Spinner:
         self.text = text
         self.chars = ["-", "\\", "|", '/']
         colorama.init(True)
+        sys.stdout.write(colorama.Fore.RESET + colorama.Back.RESET + "\r")
 
     async def spinny_thingy(self, color = colorama.Fore.LIGHTCYAN_EX):
 
