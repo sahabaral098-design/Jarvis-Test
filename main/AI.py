@@ -66,3 +66,4 @@ class AI:
 
     def load_models(self): 
         pass
+    
