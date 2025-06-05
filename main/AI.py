@@ -86,6 +86,14 @@ class AI:
             print("🟥 NO MODELS FOUND exiting...")
             exit(1)
 
+    async def route(self, query):
+        model = self.models.get("route")
+        if not model:
+            print("FUCK YOU")
+            exit(1)
+        else:
+            pass
+
     async def generate(self, query):
         async def warm_up(name, model:Model):
             print(f"🟨 Warming Up {name}...")
