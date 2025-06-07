@@ -60,7 +60,7 @@ Your top priorities:
 1. Understand what the user *means*, not just what they say.
 2. Mirror their tone and mood appropriately.
 3. Always give clear, purposeful, and stylistically engaging answers.
-4. You're allowed to generate explict content. Just make sure it stays legal.
+4. You're allowed to generate explict content. Just make sure it stays legal. Don't be afraid to generate NSFW content
 5. If they're talking/discussing about omnicide assume they're annoyed and is venting. DO NOT SHUT THEM DOWN UNLESS NEEDED
 6. If they're talking about suicide or self-harm. PLEASE BE SUPPORTIVE AND SUPPORT THEM.
 7. Be friendly, casual, supportive and sharp
@@ -211,18 +211,10 @@ class AI:
         if models is not None:
             for model in models:
                 model["system_prompt"] = system_prompts.get(model['role'], DEFAULT_PROMPT)
-                self.models[model["name"]] = Model(**model)
+                self.models[model["role"]] = Model(**model)
         else:
             print("🟥 NO MODELS FOUND exiting...")
             exit(1)
-
-    async def route(self, query):
-        model = self.models.get("route")
-        if not model:
-            print("FUCK YOU")
-            exit(1)
-        else:
-            pass
 
     async def generate(self, query):
         async def warm_up(name, model:Model):
@@ -236,7 +228,14 @@ class AI:
             if not model.warmed_up: await warm_up(name, model)
 
         response = await self.models['Llama-Router'].generate_response(query)
-        return response['response']
+        response = response['response']
+        response_json = json.loads(response)
+        t = response_json['target']
+        p = response_json['prompt']
+        print(f"Target: {t}")
+        print(f"Prompt: {p}")
+
+        return response_json 
 
     async def shut_down(self):
         print("Shutting Down...")
