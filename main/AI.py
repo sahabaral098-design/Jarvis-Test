@@ -162,7 +162,6 @@ If the prompt is ambiguous, ask questions before proceeding.
 Don't assume context unless given. Just think like a scientist, tutor, or logic solver. Keep the explanation neat, structured, and transparent.
 
 Final output: A clear answer with explanation if needed. Wrap up with a summary line if appropriate. Keep it in markdown format.
-
 '''
 
 import asyncio
