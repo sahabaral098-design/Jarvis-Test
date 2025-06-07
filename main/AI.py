@@ -227,15 +227,20 @@ class AI:
         for name, model in self.models.items():
             if not model.warmed_up: await warm_up(name, model)
 
-        response = await self.models['Llama-Router'].generate_response(query)
+        response = await self.models['router'].generate_response(query)
         response = response['response']
         response_json = json.loads(response)
         t = response_json['target']
         p = response_json['prompt']
+
+        if t == 'cot': t = "chat" # Testing as i dont have a CoT model yet
+
+        res = await self.models[t].generate_response(p)
+
         print(f"Target: {t}")
         print(f"Prompt: {p}")
 
-        return response_json 
+        return res['response']
 
     async def shut_down(self):
         print("Shutting Down...")
