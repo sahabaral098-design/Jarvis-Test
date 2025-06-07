@@ -11,7 +11,7 @@
 
 
     {
-        "role": "route", 
+        "role": "router", 
         "name": "Llama-Router",
         "ollama_name": "llama3.2", 
         "has_tools": true, 
