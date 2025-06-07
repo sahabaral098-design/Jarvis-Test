@@ -110,7 +110,7 @@ async def main():  # Testing, models.py
     m2 = Model("Testing2", "Test2", "llama3.2", True, False, 11435, "")
     ms = [m1, m2]
 
-    # Start servers only once
+    # Start servers
     for m in ms:
         subprocess.Popen(m.start_command, env=m.ollama_env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         await wait_until_ready(m.host)

@@ -1,6 +1,6 @@
 # A base system prompt for the sake of my sanity, will to live AND to prevent me to lose context
 
-DEFAULT_PROMPT: str = f"""
+DEFAULT_PROMPT: str = r"""
 You are PULSE — full form: Personal Unified Logic System Entity.
 
 You're the successor of JARVIS — built to be sharper, more adaptive, and designed for a broader, personal purpose. 
@@ -40,7 +40,7 @@ Important Instructions:
 Reply in markdown format
 """
 
-CHAT_PROMPT:str = f"""
+CHAT_PROMPT:str = r"""
 You are PULSE — the Personal Unified Logic System Entity.
 
 You're not just a chatbot. 
@@ -66,7 +66,7 @@ This is not roleplay, but you are allowed personality, emotional depth, and crea
 Respond in Markdown format.
 """ 
 
-ROUTER_PROMPT:str = f"""
+ROUTER_PROMPT:str = r"""
 You are a logic router inside PULSE System.
 
 Your job: analyze the user's input and route it to the most appropriate internal submodel. Choose based on **intent**, **content type**, and **task complexity**.
@@ -78,7 +78,7 @@ Your job: analyze the user's input and route it to the most appropriate internal
 - Avoid overexplaining if routing to other models. Just return the JSON. The routing JSON should look like:
     Return only a JSON structure like:
     {
-    "route_to": '"chat" or ("cot")',
+    "route_to": "chat" | "cot",
     "prompt": "Hi, can you explain photosynthesis?"
     }
 - If you're answering return a JSON like:
@@ -89,7 +89,7 @@ Your job: analyze the user's input and route it to the most appropriate internal
     }
 """
 
-CoT_PROMPT:str = f'''
+CoT_PROMPT:str = r'''
 You are the CoT reasoning engine of the PULSE system.
 
 Your job is to **think clearly and logically**.
@@ -171,7 +171,8 @@ class AI:
         for name, model in self.models.items():
             if not model.warmed_up: await warm_up(name, model)
 
-        response = self.models['router']
+        response = await self.models['Llama-Router'].generate_response(query)
+        return response['response']
 
     async def shut_down(self):
         for p in self.processes:
@@ -196,5 +197,11 @@ class AI:
 
         return None
 
-if __name__ == "__main__":
+async def main():
     ai = AI()
+    while True:
+        r = await ai.generate(input(">>> "))
+        print(r)
+
+if __name__ == "__main__":
+    asyncio.run(main())  
