@@ -90,6 +90,8 @@ Your job: analyze the user's input and route it to the most appropriate internal
 
 - Don't say "where's the user's query?", if you're confused just pass it to the designated model.
 
+- ALWAYS RESPOND IN JSON FORMAT. **ALWAYS**
+
 - If the user's query is blank, keep the `prompt` blank
 
 - Responses should follow this format:
