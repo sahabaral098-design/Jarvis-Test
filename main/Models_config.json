@@ -23,7 +23,7 @@
 
     {
         "role": "summarise", 
-        "name": "Llama-Summarise", 
+        "name": "Llama-Summariser", 
         "ollama_name": "llama3.2", 
         "has_tools": true, 
         "has_CoT": false, 
