@@ -44,20 +44,18 @@ class Model:
                     "messages": [{"role": "system", "content": self.system},{"role": "user", "content": "hi"}],
                     "stream": False,
                 }
-                async with self.session as session:
-                    async with session.post(url, headers=headers, data=json.dumps(warmup_data)) as response:
-                        response.raise_for_status()
-                        await response.json()
+                async with self.session.post(url, headers=headers, data=json.dumps(warmup_data)) as response:
+                    response.raise_for_status()
+                    await response.json()
                 
                 self.warmed_up = True
 
-                print(f"🟨 [INFO] {self.name}({self.ollama_name}) warmed up!")
+                print(f"🟩 [INFO] {self.name}({self.ollama_name}) warmed up!")
                 return {"response": ""}
                 
             else:
                 print("Generating response...") # Normal generation
-                async with self.session as session:
-                    async with session.post(url, headers=headers, data=json.dumps(data)) as response:
+                async with self.session.post(url, headers=headers, data=json.dumps(data)) as response:
                         response.raise_for_status()
 
                         response = await response.json()

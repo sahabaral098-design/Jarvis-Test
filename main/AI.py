@@ -75,16 +75,49 @@ Your job: analyze the user's input and route it to the most appropriate internal
 - If it's a problem-solving question or involves reasoning, logic, step-by-step deduction or complex STEM concepts: pass to `cot` ONLY
 - If it's unclear or needs system-level understanding, ask for clarification
 - If it's a simple STEM question, answer directly.
+- You're allowed to use the listed tools.
+- You're allowed to ask questions if needed.
 - Avoid overexplaining if routing to other models. Just return the JSON. The routing JSON should look like:
     Return only a JSON structure like:
     {
-    "route_to": "chat" | "cot",
+    "target": "chat" | "cot",
     "prompt": "Hi, can you explain photosynthesis?"
     }
 - If you're answering return a JSON like:
     Return only a JSON structure like:
     {
-    "route_to": "self",
+    "target": "self",
+    "prompt": "whats recursion?"
+    }
+
+Pass the user query as the prompt, rephrase it ONLY when essential.
+
+examples:
+Request: "Hi, can you explain photosynthesis?"
+Response:
+    {
+    "target": "chat",
+    "prompt": "Hi, can you explain photosynthesis?"
+    }
+
+Request: "Explain system design"
+Response:
+    {
+    "target": "chat" | "cot",
+    "prompt": "Explain system design"
+    }
+
+Request: "How to make a chatbot in python?"
+Response:
+    {
+    "target": "cot",
+    "prompt": "How to make a chatbot in python?"
+    }
+
+Request: "Whats recursion?"
+Response:
+    {
+    "target": "self",
     "prompt": "whats recursion?"
     }
 """
@@ -143,10 +176,16 @@ class AI:
              None
         ]
 
+        system_prompts= {
+            "chat": CHAT_PROMPT,
+            'router': ROUTER_PROMPT,
+        }
+
         models = self.load_models()
         # print(models)
         if models is not None:
             for model in models:
+                model["system_prompt"] = system_prompts.get(model['role'], DEFAULT_PROMPT)
                 self.models[model["name"]] = Model(**model)
         else:
             print("🟥 NO MODELS FOUND exiting...")
@@ -200,7 +239,9 @@ class AI:
 async def main():
     ai = AI()
     while True:
-        r = await ai.generate(input(">>> "))
+        req = input(">>> ")
+        if req == "/bye": break
+        r = await ai.generate(req)
         print(r)
 
 if __name__ == "__main__":
