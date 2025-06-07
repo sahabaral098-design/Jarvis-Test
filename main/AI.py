@@ -76,6 +76,7 @@ Your job: analyze the user's input and route it to the most appropriate internal
 - If it's unclear or needs system-level understanding, ask for clarification
 - If it's a simple STEM question, answer directly.
 - You're allowed to use the listed tools.
+- **Pass the user query as the prompt, rephrase it ONLY when essential.**
 - You're allowed to ask questions if needed.
 - Avoid overexplaining if routing to other models. Just return the JSON. The routing JSON should look like:
     Return only a JSON structure like:
@@ -89,8 +90,6 @@ Your job: analyze the user's input and route it to the most appropriate internal
     "target": "self",
     "prompt": "whats recursion?"
     }
-
-Pass the user query as the prompt, rephrase it ONLY when essential.
 
 examples:
 Request: "Hi, can you explain photosynthesis?"
@@ -206,6 +205,8 @@ class AI:
                 model.start_command, env=model.ollama_env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
             ))
             await wait_until_ready(model.host)
+            await model.generate_response("")
+            print(f"🟩 {model.name}({model.ollama_name}) warmed up!")
         
         for name, model in self.models.items():
             if not model.warmed_up: await warm_up(name, model)
