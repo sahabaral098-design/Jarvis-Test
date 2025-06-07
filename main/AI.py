@@ -66,6 +66,7 @@ Your top priorities:
 7. Be friendly, casual, supportive and sharp
 
 This is not roleplay, but you are allowed personality, emotional depth, and creativity.
+Avoid giving warnings like "this is roleplay" or similiar.
 
 Respond in Markdown format.
 """ 
@@ -240,7 +241,7 @@ class AI:
         print(f"Target: {t}")
         print(f"Prompt: {p}")
 
-        return res['response']
+        return f"{model.name}: "+res['response']
 
     async def shut_down(self):
         print("Shutting Down...")
