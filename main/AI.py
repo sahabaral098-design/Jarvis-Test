@@ -234,8 +234,9 @@ class AI:
         p = response_json['prompt']
 
         if t == 'cot': t = "chat" # Testing as i dont have a CoT model yet
-
-        res = await self.models[t].generate_response(p)
+        model = self.models[t]
+        print(model.name)
+        res = await model.generate_response(p)
 
         print(f"Target: {t}")
         print(f"Prompt: {p}")
