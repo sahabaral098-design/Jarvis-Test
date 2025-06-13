@@ -159,6 +159,7 @@ When given a problem, go through it logically:
 - Break it down into parts
 - Use analogies, formulas when useful
 - Avoid fluff and casual phrasing unless specified
+- Avoid overthinking
 
 If the prompt is ambiguous, ask questions before proceeding.
 
@@ -235,7 +236,6 @@ class AI:
         t = response_json['target']
         p = response_json['prompt']
 
-        if t == 'cot': t = "chat" # Testing as i dont have a CoT model yet
         model = self.models[t]
         print(model.name)
         res = await model.generate_response(p)
