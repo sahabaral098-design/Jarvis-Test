@@ -18,5 +18,13 @@
         "has_CoT": false, 
         "port":11442, 
         "system_prompt": ""
+    },
+    {
+        "role": "cot",
+        "name":"Deepseek-R1",
+        "has_tools": false,
+        "has_CoT":true,
+        "port": 12345,
+        "system_prompt": ""
     }
 ]
