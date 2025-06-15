@@ -22,6 +22,7 @@
     {
         "role": "cot",
         "name":"Deepseek-R1",
+        "ollama_name": "deepseek-r1:7b",
         "has_tools": false,
         "has_CoT":true,
         "port": 12345,
