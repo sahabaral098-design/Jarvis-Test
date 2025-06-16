@@ -25,7 +25,7 @@
         "ollama_name": "deepseek-r1:7b",
         "has_tools": false,
         "has_CoT":true,
-        "port": 12345,
+        "port": 13345,
         "system_prompt": ""
     }
 ]
