@@ -16,15 +16,5 @@
         "has_CoT":true,
         "port": 13345,
         "system_prompt": ""
-    },
-
-    {
-        "role": "router", 
-        "name": "Llama-Router",
-        "ollama_name": "llama3.2", 
-        "has_tools": true, 
-        "has_CoT": false, 
-        "port":11442, 
-        "system_prompt": ""
     }
 ]
