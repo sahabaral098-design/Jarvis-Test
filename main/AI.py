@@ -207,6 +207,7 @@ class AI:
         system_prompts= {
             "chat": CHAT_PROMPT,
             'router': ROUTER_PROMPT,
+            "cot": CoT_PROMPT,
         }
 
         models = self.load_models()
