@@ -29,7 +29,7 @@ class Model:
         headers = {"Content-Type": "application/json"}
         data = {
             "model": self.ollama_name,
-            "messages": context + [{"role": "system", "content": self.system},{"role": "user", "content": query}],
+            "messages": [{"role": "system", "content": self.system}] + context + [{"role": "user", "content": query}],
             "stream": False,
         }
 
