@@ -24,14 +24,16 @@ class Model:
 
         self.session = None
 
-    async def generate_response(self, query:str):
+    async def generate_response(self, query:str, context = []):
         url = f"{self.host}/api/chat" # For API calling
         headers = {"Content-Type": "application/json"}
         data = {
             "model": self.ollama_name,
-            "messages": [{"role": "system", "content": self.system},{"role": "user", "content": query}],
+            "messages": context + [{"role": "system", "content": self.system},{"role": "user", "content": query}],
             "stream": False,
         }
+
+        self.context = context
 
         if not self.session:
             self.session = aiohttp.ClientSession()

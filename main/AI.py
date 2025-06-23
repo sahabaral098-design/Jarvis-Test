@@ -3,6 +3,7 @@ from configs import CoT_PROMPT, CHAT_PROMPT, ROUTER_PROMPT, DEFAULT_PROMPT
 import asyncio
 import subprocess
 import aiohttp
+import aiofiles
 from models import Model
 import json
 from utils import save_memory, load_memory
@@ -27,12 +28,14 @@ async def wait_until_ready(url: str, timeout: int = 20):
     raise TimeoutError(f"🟥 Ollama server did not start in time.")
 
 class AI:
-    def __init__(self, model_config_path= "main/Models_config.json",context_path="main/saves/context.json", memory_path = "main/saves/memory.json") -> None:
+    async def __init__(self, model_config_path= "main/Models_config.json",context_path="main/saves/context.json", memory_path = "main/saves/memory.json") -> None:
         self.model_config_path = model_config_path
         self.context_path = context_path
         self.memory_path = memory_path
         self.models :dict[str,Model] = dict()
         self.processes:list[subprocess.Popen] = []
+
+        self.context = await self.load_context()
 
         self.tools = [
              None
@@ -54,7 +57,7 @@ class AI:
             print("🟥 NO MODELS FOUND exiting...")
             exit(1)
 
-    async def generate(self, query:str, only_warmup = False):
+    async def generate(self, query:str):
         async def warm_up(name, model:Model):
             self.processes.append(subprocess.Popen(
                 model.start_command, env=model.ollama_env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
@@ -65,25 +68,27 @@ class AI:
         for name, model in self.models.items():
             if not model.warmed_up: await warm_up(name, model)
 
-        if only_warmup:
-            return f""
+         # Normal normal generation
+        if query.startswith("!think"):
+            query =  query.removeprefix("!think")
+            model_name = "cot"
+        elif query.startswith("!chat"):
+            query = query.removeprefix("!chat")
+            model_name = "chat"
         else:
-            if query.startswith("!think"):
-                query.removeprefix("!think")
-                model_name = "cot"
-            elif query.startswith("!chat"):
-                query.removeprefix("!chat")
-                model_name = "chat"
-            else:
-                model_name = default_model
+            model_name = default_model
 
-            model = self.models[model_name]
-            print(model.name)
-            print(query)
-            response = await model.generate_response(query)
-            response = response['response']
+        model = self.models[model_name]
+        print(model.name)
+        print(query)
+        response = await model.generate_response(query, self.context)
+        response = response['response']
 
-            return response
+        self.context['conversations'].append({"user": query, "assistant": response}) # type: ignore
+
+        await self.save_context()
+
+        return response
 
     async def shut_down(self):
         print("Shutting Down...")
@@ -93,11 +98,15 @@ class AI:
             if model.session is not None:
                 await model.session.close() # type: ignore
 
-    def load_context(self): 
-        pass
-    
-    def save_context(self): 
-        pass
+    async def load_context(self): 
+        async with aiofiles.open(self.context_path) as file:
+            content = await file.read()
+            return json.loads(content)
+
+    async def save_context(self):
+        async with aiofiles.open(self.context_path, "w") as file:
+            await file.write(json.dumps(self.context, indent=2))
+
 
     def load_models(self) : 
         try:
