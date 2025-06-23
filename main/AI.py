@@ -28,7 +28,7 @@ async def wait_until_ready(url: str, timeout: int = 20):
     raise TimeoutError(f"🟥 Ollama server did not start in time.")
 
 class AI:
-    async def __init__(self, model_config_path= "main/Models_config.json",context_path="main/saves/context.json", memory_path = "main/saves/memory.json") -> None:
+    def __init__(self, model_config_path= "main/Models_config.json",context_path="main/saves/context.json", memory_path = "main/saves/memory.json") -> None:
         self.model_config_path = model_config_path
         self.context_path = context_path
         self.memory_path = memory_path
@@ -99,9 +99,16 @@ class AI:
                 await model.session.close() # type: ignore
 
     async def load_context(self): 
-        async with aiofiles.open(self.context_path) as file:
-            content = await file.read()
-            return json.loads(content)
+        try:
+            async with aiofiles.open(self.context_path) as file:
+                content = await file.read()
+                return json.loads(content)
+        except FileNotFoundError:
+            return {"conversations": []}
+        except json.JSONDecodeError as e:
+            print(f"🟥 JSON Error: {e}")
+            return {"conversations": []}
+
 
     async def save_context(self):
         async with aiofiles.open(self.context_path, "w") as file:
