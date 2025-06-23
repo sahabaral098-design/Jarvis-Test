@@ -7,7 +7,9 @@ from models import Model
 import json
 from utils import save_memory, load_memory
 
-# Sooo... now what?
+# Sooo ... now what?
+
+default_model = 'chat'
 
 async def wait_until_ready(url: str, timeout: int = 20):
     print("Waiting for Ollama to be ready...")
@@ -52,7 +54,7 @@ class AI:
             print("🟥 NO MODELS FOUND exiting...")
             exit(1)
 
-    async def generate(self, query):
+    async def generate(self, query:str):
         async def warm_up(name, model:Model):
             self.processes.append(subprocess.Popen(
                 model.start_command, env=model.ollama_env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
@@ -63,20 +65,17 @@ class AI:
         for name, model in self.models.items():
             if not model.warmed_up: await warm_up(name, model)
 
-        response = await self.models['router'].generate_response(query)
-        response = response['response']
-        response_json = json.loads(response)
-        t = response_json['target']
-        p = response_json['prompt']
+        if query.startswith("!think"):
+            query.removeprefix("!think")
+            model_name = "cot"
+        elif query.startswith("!chat"):
+            query.removeprefix("!chat")
+            model_name = "chat"
+        else:
+            model_name = default_model
 
-        model = self.models[t]
+        model = self.models[model_name]
         print(model.name)
-        res = await model.generate_response(p)
-
-        print(f"Target: {t}")
-        print(f"Prompt: {p}")
-
-        return f"{model.name}: "+res['response']
 
     async def shut_down(self):
         print("Shutting Down...")
