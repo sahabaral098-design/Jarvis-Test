@@ -54,7 +54,7 @@ class AI:
             print("🟥 NO MODELS FOUND exiting...")
             exit(1)
 
-    async def generate(self, query:str):
+    async def generate(self, query:str, only_warmup = False):
         async def warm_up(name, model:Model):
             self.processes.append(subprocess.Popen(
                 model.start_command, env=model.ollama_env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
@@ -65,26 +65,33 @@ class AI:
         for name, model in self.models.items():
             if not model.warmed_up: await warm_up(name, model)
 
-        if query.startswith("!think"):
-            query.removeprefix("!think")
-            model_name = "cot"
-        elif query.startswith("!chat"):
-            query.removeprefix("!chat")
-            model_name = "chat"
+        if only_warmup:
+            return f""
         else:
-            model_name = default_model
+            if query.startswith("!think"):
+                query.removeprefix("!think")
+                model_name = "cot"
+            elif query.startswith("!chat"):
+                query.removeprefix("!chat")
+                model_name = "chat"
+            else:
+                model_name = default_model
 
-        model = self.models[model_name]
-        print(model.name)
-        response = await model.generate_response(query)
-        return f"{model.name}:\n{response['response']}"
+            model = self.models[model_name]
+            print(model.name)
+            print(query)
+            response = await model.generate_response(query)
+            response = response['response']
+
+            return response
 
     async def shut_down(self):
         print("Shutting Down...")
         for p in self.processes:
             p.terminate()
         for model in self.models.values():
-            await model.session.close() # type: ignore
+            if model.session is not None:
+                await model.session.close() # type: ignore
 
     def load_context(self): 
         pass
@@ -107,10 +114,12 @@ async def main():
     ai = AI()
     while True:
         req = input(">>> ")
-        if req == "/bye": break
+        if req == "/bye":
+            await ai.shut_down()
+            break
         r = await ai.generate(req)
         print(r)
-    await ai.shut_down()
 
-if __name__ == "__main__":
-    asyncio.run(main())  
+
+# if __name__ == "__main__":
+#     asyncio.run(main())  

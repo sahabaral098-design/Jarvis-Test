@@ -13,6 +13,8 @@ ai = AI()
 class Bot(discord.Client):
     async def on_ready(self):
         print(f'Logged in as {self.user}')
+        await ai.generate("")
+        print("Ready!")
 
     async def on_message(self, message: discord.Message):
         if message.author.bot:
@@ -26,7 +28,7 @@ class Bot(discord.Client):
         if att:
             for a in att:
                     print(a.filename)
-                    if a.filename.split(".")[-1] in ['py', 'txt']:
+                    if a.filename.split(".")[-1] in ['py', 'txt']: # type: ignore
                         print("file detected")
                         c = await a.read()
                         decoded = c.decode(errors="ignore")
@@ -38,28 +40,40 @@ class Bot(discord.Client):
             return
         await message.channel.typing()
         try:
-            think, response = ""
+            response = await ai.generate(query)
+            try:
+                think, response = response.split('</think>')
+                think = think.replace("<think>", '').replace("</think>", "")
+            except:
+                pass
             await message.channel.typing()
-
         except Exception as e:
             print(f"[Error] {e}")
             response = f"Oops! Something went wrong. Try again later. (`{e}`)"
 
         await message.reply(response)
+
         if think is not None:
-            await message.channel.send(f'Thinking:\n```\n{think}```')
+            await message.channel.send(f'Thinking:\n```\n{think}\n```')
         else: # Debuger
             await message.channel.send("-# NO THINKING")
         # print("AI: " + response)
 
-async def main():
-    try:
-        bot = Bot(intents=intents)
-        bot.run(DISCORD_KEY)
-    except Exception as e:
-        print(f"An Error occured: {e}")
-    finally:
-        await ai.shut_down()
 
-asyncio.run(main())
-    
+async def start_discord_bot():
+    """Starts and manages the Discord bot's lifecycle."""
+    bot = Bot(intents=intents)
+    try:
+        if not DISCORD_KEY:
+            raise ValueError("DISCORD_KEY is missing.")
+        await bot.start(DISCORD_KEY)
+    except Exception as e:
+        print(f"🟥 An unhandled error occurred in start_discord_bot: {e}")
+    finally:
+        if bot.is_ready():
+            await bot.close() 
+        await ai.shut_down()
+        print("PULSE AI system shut down...")
+
+if __name__ == "__main__":
+    asyncio.run(start_discord_bot()) 
