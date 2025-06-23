@@ -35,8 +35,6 @@ class AI:
         self.models :dict[str,Model] = dict()
         self.processes:list[subprocess.Popen] = []
 
-        self.context = await self.load_context()
-
         self.tools = [
              None
         ]
@@ -56,6 +54,9 @@ class AI:
         else:
             print("🟥 NO MODELS FOUND exiting...")
             exit(1)
+
+    async def init(self):
+        self.context = await self.load_context()
 
     async def generate(self, query:str):
         async def warm_up(name, model:Model):

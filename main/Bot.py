@@ -14,6 +14,7 @@ class Bot(discord.Client):
     async def on_ready(self):
         print(f'Logged in as {self.user}')
         await ai.generate("")
+        await ai.init()
         print("Ready!")
 
     async def on_message(self, message: discord.Message):
