@@ -76,6 +76,8 @@ class AI:
 
         model = self.models[model_name]
         print(model.name)
+        response = await model.generate_response(query)
+        return f"{model.name}:\n{response['response']}"
 
     async def shut_down(self):
         print("Shutting Down...")
