@@ -55,8 +55,10 @@ class AI:
             print("🟥 NO MODELS FOUND exiting...")
             exit(1)
 
-    async def init(self):
+    async def init(self , auto_warmup = False):
         self.context = await self.load_context()
+        if auto_warmup:
+            await self.generate("")
 
     async def generate(self, query:str):
         async def warm_up(name, model:Model):
