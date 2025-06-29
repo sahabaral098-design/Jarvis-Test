@@ -26,10 +26,13 @@ class Model:
 
     async def generate_response(self, query:str, context = []):
         url = f"{self.host}/api/chat" # For API calling
+
+        messages = [{"role": "system", "content": self.system}] + context.get("conversations", []) + [{"role": "user", "content": query}]
+
         headers = {"Content-Type": "application/json"}
         data = {
             "model": self.ollama_name,
-            "messages": context.get("conversations", []) + [{"role": "system", "content": self.system}, {"role": "user", "content": query}],
+            "messages": messages,
             "stream": False,
         }
 

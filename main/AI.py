@@ -85,7 +85,7 @@ class AI:
         response = await model.generate_response(query, self.context)
         response = response['response']
 
-        self.context['conversations'].append({"user": query, "assistant": response}) # type: ignore
+        self.context['conversations'].extend([{"role":"user", "content": query}, {"role":"assistant", "content": response}]) # type: ignore
 
         await self.save_context()
 
