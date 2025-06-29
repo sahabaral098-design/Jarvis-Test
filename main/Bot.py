@@ -53,9 +53,10 @@ class Bot(discord.Client):
             print(f"[Error] {e}")
             response = f"Oops! Something went wrong. Try again later. (`{e}`)"
 
+        print(think is not None and think.strip())
+
         await message.reply(response)
 
-        print(think is not None and think.strip())
 
         if think is not None and think.strip():
             await message.channel.send(f'Thinking:\n```\n{think}\n```')
