@@ -86,10 +86,10 @@ class AI:
         print(query)
         response = await model.generate_response(query, self.context)
         response = response['response']
+        if model.warmed_up:
+            self.context['conversations'].extend([{"role":"user", "content": query}, {"role":"assistant", "content": response}]) # type: ignore
 
-        self.context['conversations'].extend([{"role":"user", "content": query}, {"role":"assistant", "content": response}]) # type: ignore
-
-        await self.save_context()
+            await self.save_context()
 
         return response
 

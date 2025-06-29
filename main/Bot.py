@@ -15,7 +15,7 @@ class Bot(discord.Client):
         print(f'Logged in as {self.user}')
 
         await ai.init(True)
-        
+
         print("Ready!")
 
     async def on_message(self, message: discord.Message):
@@ -55,7 +55,9 @@ class Bot(discord.Client):
 
         await message.reply(response)
 
-        if think is not None:
+        print(think is not None and think.strip())
+
+        if think is not None and think.strip():
             await message.channel.send(f'Thinking:\n```\n{think}\n```')
         else: # Debuger
             await message.channel.send("-# NO THINKING")
