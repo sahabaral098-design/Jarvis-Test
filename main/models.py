@@ -24,7 +24,7 @@ class Model:
 
         self.session = None
 
-    async def generate_response(self, query:str, context = []):
+    async def generate_response(self, query:str, context = {}):
         url = f"{self.host}/api/chat" # For API calling
 
         messages = [{"role": "system", "content": self.system}] + context.get("conversations", []) + [{"role": "user", "content": query}]
