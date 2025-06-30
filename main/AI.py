@@ -58,7 +58,7 @@ class AI:
     async def init(self , auto_warmup = False):
         self.context = await self.load_context()
         if auto_warmup:
-            await self.generate("")
+            await self.generate("", False)
 
     async def warm_up(self, model:Model):
             self.processes.append(subprocess.Popen(
@@ -67,11 +67,9 @@ class AI:
             await wait_until_ready(model.host)
             await model.generate_response("")
 
-    async def generate(self, query:str):
-        save = False
+    async def generate(self, query:str, save = True):
         for model in self.models.values():
             if not model.warmed_up: 
-                save = False
                 await self.warm_up(model)
 
         # Normal normal generation
@@ -98,7 +96,6 @@ class AI:
         model = self.models[model_name]
         print(model.name)
         print(query)
-        save = True
         response = await model.generate_response(query, self.context)
         response = response['response']
         if save:
