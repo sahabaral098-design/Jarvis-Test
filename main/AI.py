@@ -69,9 +69,9 @@ class AI:
 
     async def generate(self, query:str):
         
-        for name, model in self.models.items():
-            if not model.warmed_up: await self.warm_up(model)
-            return None
+        for model in self.models.values():
+            if not model.warmed_up: 
+                await self.warm_up(model)
 
         # Normal normal generation
         if query.startswith("!think"):
