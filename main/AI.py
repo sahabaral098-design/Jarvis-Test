@@ -1,4 +1,4 @@
-from configs import CoT_PROMPT, CHAT_PROMPT, ROUTER_PROMPT, DEFAULT_PROMPT
+from configs import CoT_PROMPT, CHAT_PROMPT, ROUTER_PROMPT, DEFAULT_PROMPT, CHAOS_PROMPT
 
 import asyncio
 import subprocess
@@ -68,9 +68,10 @@ class AI:
             await model.generate_response("")
 
     async def generate(self, query:str):
-        
+        save = False
         for model in self.models.values():
             if not model.warmed_up: 
+                save = False
                 await self.warm_up(model)
 
         # Normal normal generation
@@ -80,15 +81,27 @@ class AI:
         elif query.startswith("!chat"):
             query = query.removeprefix("!chat")
             model_name = "chat"
+            m = self.models[model_name]
+            if m.system is CHAOS_PROMPT:
+                m.system = CHAT_PROMPT
+                print("Default Chat")
+        elif query.startswith("!chaos"):
+            query = query.removeprefix("!chaos")
+            model_name = "chat"
+            m = self.models[model_name]
+            if m.system is CHAT_PROMPT:
+                m.system = CHAOS_PROMPT
+                print("Chaos Mode Activated")       
         else:
             model_name = default_model
 
         model = self.models[model_name]
         print(model.name)
         print(query)
+        save = True
         response = await model.generate_response(query, self.context)
         response = response['response']
-        if model.warmed_up:
+        if save:
             self.context['conversations'].extend([{"role":"user", "content": query}, {"role":"assistant", "content": response}]) # type: ignore
 
             await self.save_context()
