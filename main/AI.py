@@ -80,14 +80,14 @@ class AI:
             query = query.removeprefix("!chat")
             model_name = "chat"
             m = self.models[model_name]
-            if m.system is CHAOS_PROMPT:
+            if m.system == CHAOS_PROMPT:
                 m.system = CHAT_PROMPT
                 print("Default Chat")
         elif query.startswith("!chaos"):
             query = query.removeprefix("!chaos")
             model_name = "chat"
             m = self.models[model_name]
-            if m.system is CHAT_PROMPT:
+            if m.system == CHAT_PROMPT:
                 m.system = CHAOS_PROMPT
                 print("Chaos Mode Activated")       
         else:
