@@ -60,18 +60,20 @@ class AI:
         if auto_warmup:
             await self.generate("")
 
-    async def generate(self, query:str):
-        async def warm_up(name, model:Model):
+    async def warm_up(self, model:Model):
             self.processes.append(subprocess.Popen(
                 model.start_command, env=model.ollama_env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
             ))
             await wait_until_ready(model.host)
             await model.generate_response("")
+
+    async def generate(self, query:str):
         
         for name, model in self.models.items():
-            if not model.warmed_up: await warm_up(name, model)
+            if not model.warmed_up: await self.warm_up(model)
+            return None
 
-         # Normal normal generation
+        # Normal normal generation
         if query.startswith("!think"):
             query =  query.removeprefix("!think")
             model_name = "cot"
@@ -116,7 +118,6 @@ class AI:
     async def save_context(self):
         async with aiofiles.open(self.context_path, "w") as file:
             await file.write(json.dumps(self.context, indent=2))
-
 
     def load_models(self) : 
         try:

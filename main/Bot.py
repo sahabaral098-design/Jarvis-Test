@@ -44,8 +44,9 @@ class Bot(discord.Client):
         try:
             response = await ai.generate(query)
             try:
-                think, response = response.split('</think>')
-                think = think.replace("<think>", '').replace("</think>", "")
+                if response is not None:
+                    think, response = response.split('</think>')
+                    think = think.replace("<think>", '').replace("</think>", "")
             except:
                 pass
             await message.channel.typing()
@@ -55,7 +56,8 @@ class Bot(discord.Client):
 
         print(think is not None and think.strip())
 
-        await message.reply(response)
+        if response is not None:
+            await message.reply(response)
 
 
         if think is not None and think.strip():
@@ -63,7 +65,6 @@ class Bot(discord.Client):
         else: # Debuger
             await message.channel.send("-# NO THINKING")
         # print("AI: " + response)
-
 
 async def start_discord_bot():
     """Starts and manages the Discord bot's lifecycle."""
