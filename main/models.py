@@ -24,7 +24,7 @@ class Model:
 
         self.session = None
 
-    async def generate_response(self, query:str, context = {}):
+    async def generate_response(self, query:str, context = {}, stream = False):
         url = f"{self.host}/api/chat" # For API calling
 
         messages = [{"role": "system", "content": self.system}] + context.get("conversations", []) + [{"role": "user", "content": query}]
@@ -33,7 +33,7 @@ class Model:
         data = {
             "model": self.ollama_name,
             "messages": messages,
-            "stream": False,
+            "stream": stream,
         }
 
         self.context = context

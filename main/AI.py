@@ -1,4 +1,9 @@
-from configs import CoT_PROMPT, CHAT_PROMPT, ROUTER_PROMPT, DEFAULT_PROMPT, CHAOS_PROMPT
+from configs import ( CoT_PROMPT, 
+                     CHAT_PROMPT, 
+                     ROUTER_PROMPT, 
+                     DEFAULT_PROMPT, 
+                     CHAOS_PROMPT, 
+                     STREAM_DISABLED )
 
 import asyncio
 import subprocess
@@ -58,7 +63,7 @@ class AI:
     async def init(self , auto_warmup = False):
         self.context = await self.load_context()
         if auto_warmup:
-            await self.generate("", False)
+            await self.generate("", "discord", False)
 
     async def warm_up(self, model:Model):
             self.processes.append(subprocess.Popen(
@@ -67,10 +72,12 @@ class AI:
             await wait_until_ready(model.host)
             await model.generate_response("")
 
-    async def generate(self, query:str, save = True):
+    async def generate(self, query:str, platform:str, save = True):
         for model in self.models.values():
             if not model.warmed_up: 
                 await self.warm_up(model)
+
+        stream = not (platform.lower() in STREAM_DISABLED)
 
         # Normal normal generation
         if query.startswith("!think"):
@@ -96,7 +103,7 @@ class AI:
         model = self.models[model_name]
         print(model.name)
         print(query)
-        response = await model.generate_response(query, self.context)
+        response = await model.generate_response(query, self.context, stream)
         response = response['response']
         if save:
             self.context['conversations'].extend([{"role":"user", "content": query}, {"role":"assistant", "content": response}]) # type: ignore
@@ -148,7 +155,7 @@ async def main():
         if req == "/bye":
             await ai.shut_down()
             break
-        r = await ai.generate(req)
+        r = await ai.generate(req, "discord")
         print(r)
 
 
