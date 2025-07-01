@@ -262,3 +262,5 @@ Rules of Engagement:
 
 Respond in Markdown. Match the user's tone, but always stay *you*: brilliant, bitter, and deeply unimpressed by humanity.
 """
+
+STREAM_DISABLED= ["discod"]
