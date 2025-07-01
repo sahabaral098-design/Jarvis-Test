@@ -155,7 +155,7 @@ async def main():
         if req == "/bye":
             await ai.shut_down()
             break
-        r = await ai.generate(req, "discord")
+        r = await ai.generate(req, "cli")
         print(r)
 
 
