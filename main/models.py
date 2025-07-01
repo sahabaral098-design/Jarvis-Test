@@ -24,7 +24,31 @@ class Model:
 
         self.session = None
 
-    async def generate_response(self, query:str, context = {}, stream = False):
+
+    async def warm_up(self):
+        print(f"🟨 [INFO] {self.name}({self.ollama_name}) warming up...")
+        warmup_data = {
+            "model": self.ollama_name,
+            "messages": [{"role": "system", "content": self.system},{"role": "user", "content": "hi"}],
+            "stream": False,
+        }
+
+        if not self.session:
+            self.session = aiohttp.ClientSession()
+
+        url = f"{self.host}/api/chat" # For API calling
+        headers = {"Content-Type": "application/json"}
+
+        async with self.session.post(url, headers=headers, data=json.dumps(warmup_data)) as response:
+            response.raise_for_status()
+            await response.json()
+                
+            self.warmed_up = True
+
+            print(f"🟩 [INFO] {self.name}({self.ollama_name}) warmed up!")
+            return {"response": ""}
+
+    async def generate_response_noStream(self, query:str, context = {}):
         url = f"{self.host}/api/chat" # For API calling
 
         messages = [{"role": "system", "content": self.system}] + context.get("conversations", []) + [{"role": "user", "content": query}]
@@ -33,31 +57,15 @@ class Model:
         data = {
             "model": self.ollama_name,
             "messages": messages,
-            "stream": stream,
+            "stream": False,
         }
-
-        self.context = context
 
         if not self.session:
             self.session = aiohttp.ClientSession()
 
         try:
             if not self.warmed_up:
-                print(f"🟨 [INFO] {self.name}({self.ollama_name}) warming up...")
-                warmup_data = {
-                    "model": self.ollama_name,
-                    "messages": [{"role": "system", "content": self.system},{"role": "user", "content": "hi"}],
-                    "stream": False,
-                }
-                async with self.session.post(url, headers=headers, data=json.dumps(warmup_data)) as response:
-                    response.raise_for_status()
-                    await response.json()
-                
-                self.warmed_up = True
-
-                print(f"🟩 [INFO] {self.name}({self.ollama_name}) warmed up!")
-                return {"response": ""}
-                
+                await self.warm_up()                
             else:
                 print("Generating response...") # Normal generation
                 async with self.session.post(url, headers=headers, data=json.dumps(data)) as response:
@@ -70,7 +78,6 @@ class Model:
                         else:
                             print(f"🟥 [Error]: Unexpected API response format: {response}")
                             return {"response": "An unexpected response format was received from the model."}
-                    
         except aiohttp.ClientError as e:
             print(f"🟥 [ERROR] Connection error: {e}")
             return {"response": f"Connection error: {e}"}
@@ -80,6 +87,49 @@ class Model:
         except Exception as e:
             print(f"🟥 [Error]: {e}")
             return {"response": f"An unexpected error occurred: {e}"}
+        
+    async def generate_response_Stream(self, query: str, context={}):
+        url = f"{self.host}/api/chat"
+
+        messages = [{"role": "system", "content": self.system}] + context.get("conversations", []) + [{"role": "user", "content": query}]
+
+        headers = {"Content-Type": "application/json"}
+        data = {
+            "model": self.ollama_name,
+            "messages": messages,
+            "stream": True,
+        }
+
+        if not self.session:
+            self.session = aiohttp.ClientSession()
+
+        try:
+            if not self.warmed_up:
+                await self.warm_up()
+
+            async with self.session.post(url, headers=headers, data=json.dumps(data)) as response:
+                response.raise_for_status()
+
+                buffer = ""
+                async for chunk in response.content.iter_any():
+                    if not chunk:
+                        continue
+                    buffer += chunk.decode("utf-8")
+
+                    # Handle partial JSON objects (Ollama may send newline-delimited JSON)
+                    for line in buffer.splitlines():
+                        try:
+                            data = json.loads(line)
+                            if "message" in data and "content" in data["message"]:
+                                yield data["message"]["content"]
+                        except json.JSONDecodeError:
+                            continue 
+        except aiohttp.ClientError as e:
+            print(f"🟥 [ERROR] Connection error: {e}")
+            yield f"\n[Connection error: {e}]"
+        except Exception as e:
+            print(f"🟥 [ERROR] Unexpected: {e}")
+            yield f"\n[Unexpected error: {e}]"
 
 
 # ------- TEST -------
@@ -100,7 +150,7 @@ async def wait_until_ready(url: str, timeout: int = 20):
     raise TimeoutError(f"🟥 Ollama server did not start in time.")
 
 
-async def main():  # Testing, models.py
+async def main():
     prompts = [
         "Hi",
         "whats your name",
@@ -113,23 +163,34 @@ async def main():  # Testing, models.py
     m2 = Model("Testing2", "Test2", "llama3.2", True, False, 11435, "")
     ms = [m1, m2]
 
-    # Start servers
+    c = {
+        'conversations': []
+    }
+
     for m in ms:
         subprocess.Popen(m.start_command, env=m.ollama_env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         await wait_until_ready(m.host)
         if not m.warmed_up:
-            await m.generate_response("WARMING UP")
+            await m.generate_response_noStream("WARMING UP", c)
 
-    # Loop through prompts
+
     for r in prompts:
         for m in ms:
-            res = await m.generate_response(r)
-            print(f"prompt: {r}\nresponse ({m.name}): {res['response']}")
+            print(f"\n🟦 prompt: {r}\n⬛ response ({m.name}): ", end='', flush=True)
 
-    # Close sessions at the end
+    
+            stream = input('Stream? (y / n): ').lower() == 'y'
+
+            if stream:
+                collected = ""
+                async for part in m.generate_response_Stream(r,c):
+                    print(part, end='', flush=True)
+                    collected += part
+
+
     for m in ms:
-        await m.session.close()  # type: ignore
-
+        if m.session:
+            await m.session.close()
 
 
 if __name__ == "__main__":

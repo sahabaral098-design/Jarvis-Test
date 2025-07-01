@@ -70,7 +70,7 @@ class AI:
                 model.start_command, env=model.ollama_env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
             ))
             await wait_until_ready(model.host)
-            await model.generate_response("")
+            await model.generate_response_noStream("")
 
     async def generate(self, query:str, platform:str, save = True):
         for model in self.models.values():
@@ -103,8 +103,9 @@ class AI:
         model = self.models[model_name]
         print(model.name)
         print(query)
-        response = await model.generate_response(query, self.context, stream)
-        response = response['response']
+        response = await model.generate_response_noStream(query, self.context)
+        if response:
+            response = response['response']
         if save:
             self.context['conversations'].extend([{"role":"user", "content": query}, {"role":"assistant", "content": response}]) # type: ignore
 
