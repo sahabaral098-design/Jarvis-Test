@@ -186,6 +186,11 @@ async def main():
                 async for part in m.generate_response_Stream(r,c):
                     print(part, end='', flush=True)
                     collected += part
+                
+                c['conversations'].extend([
+                    {"role": "user", "content": r},
+                    {"role": "assistant", "content": collected}
+                ])
 
 
     for m in ms:
