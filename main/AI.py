@@ -77,8 +77,6 @@ class AI:
             if not model.warmed_up: 
                 await self.warm_up(model)
 
-        stream = not (platform.lower() in STREAM_DISABLED)
-
         # Normal normal generation
         if query.startswith("!think"):
             query =  query.removeprefix("!think")
@@ -103,15 +101,32 @@ class AI:
         model = self.models[model_name]
         print(model.name)
         print(query)
-        response = await model.generate_response_noStream(query, self.context)
-        if response:
-            response = response['response']
-        if save:
-            self.context['conversations'].extend([{"role":"user", "content": query}, {"role":"assistant", "content": response}]) # type: ignore
 
-            await self.save_context()
+        stream = not (platform.lower() in STREAM_DISABLED)
+        if not stream:
+            response = await model.generate_response_noStream(query, self.context)
+            if response:
+                response = response['response']
+            if save:
+                self.context['conversations'].extend([{"role":"user", "content": query}, {"role":"assistant", "content": response}]) # type: ignore
 
-        return response
+                await self.save_context()
+
+            return response
+        else:
+            pass
+
+    async def generate_stream(self, query, model:Model, save):
+        collected = ""
+        async for part in model.generate_response_Stream(query,self.context):
+            yield part
+            collected += part
+                
+            self.context['conversations'].extend([
+                    {"role": "user", "content": query},
+                    {"role": "assistant", "content": collected}
+            ])
+
 
     async def shut_down(self):
         print("Shutting Down...")
