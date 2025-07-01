@@ -42,7 +42,7 @@ class Bot(discord.Client):
             return
         await message.channel.typing()
         try:
-            response = await ai.generate(query)
+            response = await ai.generate(query, "Discord")
             try:
                 if response is not None:
                     think, response = response.split('</think>')
