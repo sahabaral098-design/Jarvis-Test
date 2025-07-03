@@ -46,7 +46,7 @@ class Model:
             self.warmed_up = True
 
             print(f"🟩 [INFO] {self.name}({self.ollama_name}) warmed up!")
-            return {"response": ""}
+            return ""
 
     async def generate_response_noStream(self, query:str, context = {}):
         url = f"{self.host}/api/chat" # For API calling
@@ -74,19 +74,19 @@ class Model:
                         response = await response.json()
 
                         if 'message' in response and 'content' in response['message']:
-                            return {"response": response['message']['content']}
+                            return response['message']['content']
                         else:
                             print(f"🟥 [Error]: Unexpected API response format: {response}")
-                            return {"response": "An unexpected response format was received from the model."}
+                            return "An unexpected response format was received from the model."
         except aiohttp.ClientError as e:
             print(f"🟥 [ERROR] Connection error: {e}")
-            return {"response": f"Connection error: {e}"}
+            return f"Connection error: {e}"
         except json.JSONDecodeError:
             print(f"🟥 [Error] JSON decode error: Invalid JSON response.")
-            return {"response": "Invalid JSON response from the model."}
+            return "Invalid JSON response from the model."
         except Exception as e:
             print(f"🟥 [Error]: {e}")
-            return {"response": f"An unexpected error occurred: {e}"}
+            return f"An unexpected error occurred: {e}"
         
     async def generate_response_Stream(self, query: str, context={}):
         url = f"{self.host}/api/chat"
@@ -110,20 +110,18 @@ class Model:
             async with self.session.post(url, headers=headers, data=json.dumps(data)) as response:
                 response.raise_for_status()
 
-                buffer = ""
                 async for chunk in response.content.iter_any():
                     if not chunk:
                         continue
-                    buffer += chunk.decode("utf-8")
-
-                    # Handle partial JSON objects (Ollama may send newline-delimited JSON)
-                    for line in buffer.splitlines():
-                        try:
-                            data = json.loads(line)
-                            if "message" in data and "content" in data["message"]:
+                    try:
+                        line = chunk.decode("utf-8")
+                        data = json.loads(line)
+                        if "message" in data and "content" in data["message"]:
                                 yield data["message"]["content"]
-                        except json.JSONDecodeError:
-                            continue 
+                    except json.JSONDecodeError:
+                        continue 
+
+
         except aiohttp.ClientError as e:
             print(f"🟥 [ERROR] Connection error: {e}")
             yield f"\n[Connection error: {e}]"

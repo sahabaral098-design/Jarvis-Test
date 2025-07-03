@@ -14,7 +14,7 @@ class Bot(discord.Client):
     async def on_ready(self):
         print(f'Logged in as {self.user}')
 
-        await ai.init(True)
+        await ai.init("discord",True)
 
         print("Ready!")
 
@@ -42,10 +42,12 @@ class Bot(discord.Client):
             return
         await message.channel.typing()
         try:
-            response = await ai.generate(query, "Discord")
+            response = None
+            async for part in ai.generate(query,):
+                response = part
             try:
                 if response is not None:
-                    think, response = response.split('</think>')
+                    think, response = response.split('</think>') # type:ignore
                     think = think.replace("<think>", '').replace("</think>", "")
             except:
                 pass

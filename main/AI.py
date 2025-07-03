@@ -60,10 +60,12 @@ class AI:
             print("🟥 NO MODELS FOUND exiting...")
             exit(1)
 
-    async def init(self , auto_warmup = False):
+    async def init(self, platform:str, auto_warmup = False, ):
         self.context = await self.load_context()
+        self.platform:str = platform
         if auto_warmup:
-            await self.generate("", "discord", False)
+            async for _ in self.generate("", False):
+                continue
 
     async def warm_up(self, model:Model):
             self.processes.append(subprocess.Popen(
@@ -72,7 +74,7 @@ class AI:
             await wait_until_ready(model.host)
             await model.generate_response_noStream("")
 
-    async def generate(self, query:str, platform:str, save = True):
+    async def generate(self, query:str, save = True):
         for model in self.models.values():
             if not model.warmed_up: 
                 await self.warm_up(model)
@@ -102,31 +104,27 @@ class AI:
         print(model.name)
         print(query)
 
-        stream = not (platform.lower() in STREAM_DISABLED)
+        stream = not (self.platform.lower() in STREAM_DISABLED)
         if not stream:
             response = await model.generate_response_noStream(query, self.context)
             if response:
-                response = response['response']
+                response = response
             if save:
                 self.context['conversations'].extend([{"role":"user", "content": query}, {"role":"assistant", "content": response}]) # type: ignore
-
+                
                 await self.save_context()
 
-            return response
+            yield response
         else:
-            pass
+            part = ""
+            async for part in model.generate_response_Stream(query,self.context):
+                yield part
 
-    async def generate_stream(self, query, model:Model, save):
-        collected = ""
-        async for part in model.generate_response_Stream(query,self.context):
-            yield part
-            collected += part
-                
-            self.context['conversations'].extend([
+            if save:       
+                self.context['conversations'].extend([
                     {"role": "user", "content": query},
-                    {"role": "assistant", "content": collected}
-            ])
-
+                    {"role": "assistant", "content": part}
+                ])
 
     async def shut_down(self):
         print("Shutting Down...")
@@ -134,7 +132,7 @@ class AI:
             p.terminate()
         for model in self.models.values():
             if model.session is not None:
-                await model.session.close() # type: ignore
+                await model.session.close()
 
     async def load_context(self): 
         try:
@@ -165,14 +163,15 @@ class AI:
 
 async def main():
     ai = AI()
-    await ai.init() 
+    await ai.init("cli") 
     while True:
         req = input(">>> ")
         if req == "/bye":
             await ai.shut_down()
             break
-        r = await ai.generate(req, "cli")
-        print(r)
+        async for part in ai.generate(req,):
+            print(part, end="", flush=True)
+        print()
 
 
 if __name__ == "__main__":
