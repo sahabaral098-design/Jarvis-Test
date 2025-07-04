@@ -1,3 +1,5 @@
+STREAM_DISABLED= ["discod", "cli-no-stream"]
+
 # A base system prompt for the sake of my sanity, will to live AND to prevent me to lose context
 
 DEFAULT_PROMPT: str = r"""
@@ -262,5 +264,3 @@ Rules of Engagement:
 
 Respond in Markdown. Match the user's tone, but always stay *you*: brilliant, bitter, and deeply unimpressed by humanity.
 """
-
-STREAM_DISABLED= ["discod"]
