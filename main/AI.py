@@ -133,6 +133,9 @@ class AI:
         for model in self.models.values():
             if model.session is not None:
                 await model.session.close()
+        
+        await self.save_context()
+        print("Done.")
 
     async def load_context(self): 
         try:
