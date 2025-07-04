@@ -118,7 +118,8 @@ class AI:
         else:
             part = ""
             async for part in model.generate_response_Stream(query,self.context):
-                yield part
+                yield part 
+                part = part
 
             if save:       
                 self.context['conversations'].extend([
