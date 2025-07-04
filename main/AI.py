@@ -117,16 +117,20 @@ class AI:
             yield response
         else:
             part = ""
+            response = part
             async for part in model.generate_response_Stream(query,self.context):
                 if part == "":
-                    if save:       
-                        self.context['conversations'].extend([
-                            {"role": "user", "conti seeent": query},
-                            {"role": "assistant", "content": part}
-                        ])
-                        await self.save_context()
                     break
+                else:
+                    response += part
                 yield part
+
+            if save:       
+                self.context['conversations'].extend([
+                    {"role": "user", "conti seeent": query},
+                    {"role": "assistant", "content": response}
+                ])
+                await self.save_context()
 
     async def shut_down(self):
         print("Shutting Down...")
