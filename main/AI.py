@@ -125,6 +125,7 @@ class AI:
                     {"role": "user", "content": query},
                     {"role": "assistant", "content": part}
                 ])
+                await self.save_context()
 
     async def shut_down(self):
         print("Shutting Down...")
