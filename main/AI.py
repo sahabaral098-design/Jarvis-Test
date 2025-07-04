@@ -15,7 +15,7 @@ from utils import save_memory, load_memory
 
 # Sooo ... now what?
 
-default_model = 'chat'
+default_model = 'cot'
 
 async def wait_until_ready(url: str, timeout: int = 20):
     print("Waiting for Ollama to be ready...")

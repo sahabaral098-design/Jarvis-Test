@@ -27,7 +27,7 @@ class Model:
 
     async def warm_up(self):
         print(f"🟨 [INFO] {self.name}({self.ollama_name}) warming up...")
-        warmup_data = {
+        data = {
             "model": self.ollama_name,
             "messages": [{"role": "system", "content": self.system},{"role": "user", "content": "hi"}],
             "stream": False,
@@ -39,14 +39,21 @@ class Model:
         url = f"{self.host}/api/chat" # For API calling
         headers = {"Content-Type": "application/json"}
 
-        async with self.session.post(url, headers=headers, data=json.dumps(warmup_data)) as response:
+        async with self.session.post(url, headers=headers, data=json.dumps(data)) as response:
             response.raise_for_status()
-            await response.json()
-                
-            self.warmed_up = True
 
-            print(f"🟩 [INFO] {self.name}({self.ollama_name}) warmed up!")
-            return ""
+            response = await response.json()
+
+            if 'message' in response and 'content' in response['message']:
+                response['message']['content']
+            else:
+                print(f"🟥 [Error]: Unexpected API response format: {response}")
+                return "An unexpected response format was received from the model."
+                
+        self.warmed_up = True
+
+        print(f"🟩 [INFO] {self.name}({self.ollama_name}) warmed up!")
+        return ""
 
     async def generate_response_noStream(self, query:str, context = {}):
         url = f"{self.host}/api/chat" # For API calling
