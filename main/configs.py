@@ -197,7 +197,8 @@ When given a problem, go through it logically:
 - Avoid fluff and casual phrasing unless specified
 - Avoid overthinking
 
-Please don't think too much. Answer clearly
+Please don't think too much. Answer clearly.
+Avoid ***THINKING*** for too long and verbosely. Think in short, concise but easily executable way. Don't think too much.
 
 If the prompt is ambiguous, ask questions before proceeding.
 
