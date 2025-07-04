@@ -1,20 +1,20 @@
 [
     {
-        "role": "chat", 
-        "name": "Zephyr", 
-        "ollama_name": "zephyr", 
-        "has_tools": false, 
-        "has_CoT": false, 
-        "port":11434, 
-        "system_prompt": ""
-    },
-    {
         "role": "cot",
         "name":"Deepseek-R1",
         "ollama_name": "deepseek-r1:7b",
         "has_tools": false,
         "has_CoT":true,
         "port": 13345,
+        "system_prompt": ""
+    },
+    {
+        "role": "chat", 
+        "name": "Zephyr", 
+        "ollama_name": "zephyr", 
+        "has_tools": false, 
+        "has_CoT": false, 
+        "port":11434, 
         "system_prompt": ""
     }
 ]
