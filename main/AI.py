@@ -119,11 +119,12 @@ class AI:
             part = ""
             async for part in model.generate_response_Stream(query,self.context):
                 yield part 
-                part = part
+                if part == "":
+                    break
 
             if save:       
                 self.context['conversations'].extend([
-                    {"role": "user", "content": query},
+                    {"role": "user", "conti seeent": query},
                     {"role": "assistant", "content": part}
                 ])
                 await self.save_context()
