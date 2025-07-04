@@ -50,6 +50,8 @@ class Model:
                 print(f"🟥 [Error]: Unexpected API response format: {response}")
                 return "An unexpected response format was received from the model."
         
+        print('Non-Streaming works. Trying Streaming...')
+
         data = {
             "model": self.ollama_name,
             "messages": [{"role": "system", "content": self.system},{"role": "user", "content": "hi"}],
