@@ -172,7 +172,7 @@ class AI:
 
 async def main():
     ai = AI()
-    await ai.init("cli") 
+    await ai.init("cli", True) 
     while True:
         req = input(">>> ")
         if req == "/bye":

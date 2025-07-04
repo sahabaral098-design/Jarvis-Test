@@ -5,7 +5,7 @@
         "ollama_name": "zephyr", 
         "has_tools": false, 
         "has_CoT": false, 
-        "port":11011, 
+        "port":11434, 
         "system_prompt": ""
     },
     {
