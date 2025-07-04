@@ -118,9 +118,9 @@ class AI:
         else:
             part = ""
             async for part in model.generate_response_Stream(query,self.context):
-                yield part 
                 if part == "":
                     break
+                yield part 
 
             if save:       
                 self.context['conversations'].extend([
