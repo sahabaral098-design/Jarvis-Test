@@ -49,7 +49,27 @@ class Model:
             else:
                 print(f"🟥 [Error]: Unexpected API response format: {response}")
                 return "An unexpected response format was received from the model."
-                
+        
+        data = {
+            "model": self.ollama_name,
+            "messages": [{"role": "system", "content": self.system},{"role": "user", "content": "hi"}],
+            "stream": True,
+        }
+
+        async with self.session.post(url, headers=headers, data=json.dumps(data)) as response:
+                response.raise_for_status()
+
+                async for chunk in response.content.iter_any():
+                    if not chunk:
+                        continue
+                    try:
+                        line = chunk.decode("utf-8")
+                        data = json.loads(line)
+                        if "message" in data and "content" in data["message"]:
+                            data["message"]["content"]
+                    except json.JSONDecodeError:
+                        continue 
+
         self.warmed_up = True
 
         print(f"🟩 [INFO] {self.name}({self.ollama_name}) warmed up!")
