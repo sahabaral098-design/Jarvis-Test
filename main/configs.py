@@ -197,6 +197,8 @@ When given a problem, go through it logically:
 - Avoid fluff and casual phrasing unless specified
 - Avoid overthinking
 
+Please don't think too much. Answer clearly
+
 If the prompt is ambiguous, ask questions before proceeding.
 
 Don't assume context unless given. Just think like a scientist, tutor, or logic solver. Keep the explanation neat, structured, and transparent.
