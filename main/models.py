@@ -155,9 +155,12 @@ class Model:
         except aiohttp.ClientError as e:
             print(f"🟥 [ERROR] Connection error: {e}")
             yield f"\n[Connection error: {e}]"
-        # except Exception as e:
-        #     print(f"🟥 [ERROR] Unexpected: {e}")
-        #     yield f"\n[Unexpected error: {e}]"
+        except TimeoutError as e:
+            print(f"🟥 Timeout Error: {e}")
+            yield f"\n🟥 Timeout Error: {e}"
+        except Exception as e:
+            print(f"🟥 [ERROR] Unexpected: {e}")
+            yield f"\n[Unexpected error: {e}]"
 
 
 # ------- TEST -------
