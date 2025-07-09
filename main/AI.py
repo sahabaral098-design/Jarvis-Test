@@ -100,7 +100,7 @@ class AI:
         else:
             model_name = default_model
 
-        model = self.models[model_name]
+        model = self.models[model_name.lower()]
         print(model.name)
         print(query)
 
