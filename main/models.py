@@ -45,19 +45,17 @@ class Model:
 
             response = await response.json()
 
+            print("✅ JSON response:", response)
+
             if 'message' in response and 'content' in response['message']:
                 response['message']['content']
             else:
                 print(f"🟥 [Error]: Unexpected API response format: {response}")
                 return "An unexpected response format was received from the model."
         
-        print('Non-Streaming works. Trying Streaming...')
+        print('🟩 Non-Streaming works. Trying Streaming...')
 
-        data = {
-            "model": self.ollama_name,
-            "messages": [{"role": "system", "content": self.system},{"role": "user", "content": "hi"}],
-            "stream": True,
-        }
+        data['stream'] = True
 
         async with self.session.post(url, headers=headers, data=json.dumps(data)) as response:
                 response.raise_for_status()
@@ -70,6 +68,7 @@ class Model:
                         data = json.loads(line)
                         if "message" in data and "content" in data["message"]:
                             data["message"]["content"]
+                            print(data["message"]["content"])
                     except json.JSONDecodeError:
                         continue 
 
