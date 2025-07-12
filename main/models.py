@@ -57,21 +57,23 @@ class Model:
 
         data['stream'] = True
 
+        buffer = ""
+
         async with self.session.post(url, headers=headers, data=json.dumps(data)) as response:
                 response.raise_for_status()
 
                 async for chunk in response.content.iter_any():
-                    if not chunk:
-                        continue
-                    try:
-                        line = chunk.decode("utf-8")
-                        data = json.loads(line)
-                        if "message" in data and "content" in data["message"]:
-                            data["message"]["content"]
-                            print(data["message"]["content"], end='', flush=True)
-                    except json.JSONDecodeError:
-                        continue 
-
+                    buffer += chunk.decode("utf-8")
+                    while "\n" in buffer:
+                        line, buffer = buffer.split("\n", 1)
+                        if not line.strip():
+                            continue
+                        try:
+                            data = json.loads(line)
+                            if "message" in data and "content" in data["message"]:
+                                print(data["message"]["content"])
+                        except json.JSONDecodeError:
+                            continue
         self.warmed_up = True
 
         print(f"🟩 [INFO] {self.name}({self.ollama_name}) warmed up!")
@@ -139,17 +141,20 @@ class Model:
             async with self.session.post(url, headers=headers, data=json.dumps(data)) as response:
                 response.raise_for_status()
 
-                async for chunk in response.content.iter_any():
-                    if not chunk:
-                        continue
-                    try:
-                        line = chunk.decode("utf-8")
-                        data = json.loads(line)
-                        if "message" in data and "content" in data["message"]:
-                                yield data["message"]["content"]
-                    except json.JSONDecodeError:
-                        continue 
+                buffer = ""
 
+                async for chunk in response.content.iter_any():
+                    buffer += chunk.decode("utf-8")
+                    while "\n" in buffer:
+                        line, buffer = buffer.split("\n", 1)
+                        if not line.strip():
+                            continue
+                        try:
+                            data = json.loads(line)
+                            if "message" in data and "content" in data["message"]:
+                                yield data["message"]["content"]
+                        except json.JSONDecodeError:
+                            continue
 
         except aiohttp.ClientError as e:
             print(f"🟥 [ERROR] Connection error: {e}")
