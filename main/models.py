@@ -68,7 +68,7 @@ class Model:
                         data = json.loads(line)
                         if "message" in data and "content" in data["message"]:
                             data["message"]["content"]
-                            print(data["message"]["content"])
+                            print(data["message"]["content"], end='', flush=True)
                     except json.JSONDecodeError:
                         continue 
 
