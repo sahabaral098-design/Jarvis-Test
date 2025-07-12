@@ -45,7 +45,7 @@ class Model:
 
             response = await response.json()
 
-            print("✅ JSON response:", response)
+            # print("✅ JSON response:", response)
 
             if 'message' in response and 'content' in response['message']:
                 response['message']['content']
@@ -71,7 +71,8 @@ class Model:
                         try:
                             data = json.loads(line)
                             if "message" in data and "content" in data["message"]:
-                                print(data["message"]["content"], end='', flush=True)
+                                # print(data["message"]["content"], end='', flush=True)
+                                data["message"]["content"]
                         except json.JSONDecodeError:
                             continue
         self.warmed_up = True
