@@ -71,7 +71,7 @@ class Model:
                         try:
                             data = json.loads(line)
                             if "message" in data and "content" in data["message"]:
-                                print(data["message"]["content"])
+                                print(data["message"]["content"], end='', flush=True)
                         except json.JSONDecodeError:
                             continue
         self.warmed_up = True
