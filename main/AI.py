@@ -127,7 +127,7 @@ class AI:
 
             if save:       
                 self.context['conversations'].extend([
-                    {"role": "user", "conti seeent": query},
+                    {"role": "user", "content": query},
                     {"role": "assistant", "content": response}
                 ])
                 await self.save_context()
