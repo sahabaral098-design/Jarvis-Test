@@ -1,2 +1,2 @@
 # JARVIS-test
-Just trying replicate JARVIS
+IDK WTF I'M DOING 
