@@ -17,7 +17,6 @@ def test():
             speaker_wav=speak_sample,
                 language="en",
                     file_path=out,
-                    progress_bar=True,
                     )
     print(f" Done ")
 
