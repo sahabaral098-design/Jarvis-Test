@@ -1,4 +1,3 @@
-import os
 from TTS.api import TTS
 
 speak_sample = "./assets/Kira.wav"
@@ -14,4 +13,4 @@ tts.tts_to_file(
     file_path=out
 )
 
-print(f"✅ Done! File saved to: {os.path.abspath(out)}")
+print(f" Done ")
