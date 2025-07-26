@@ -3,7 +3,7 @@ from TTS.api import TTS
 speak_sample = "main/Voice/assets/Kira.wav"
 
 def test():
-    text = "I might not be justice... but I. AM. INSANE!"
+    text = "The curious cat tiptoed across the piano, accidentally playing a haunting melody."
     out = "output.wav"
 
     tts = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2").to("cpu")
