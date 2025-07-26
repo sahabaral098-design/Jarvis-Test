@@ -1,6 +1,6 @@
 from TTS.api import TTS
 
-speak_sample = "./assets/Kira.wav"
+speak_sample = "main/Voice/assets/Kira.wav"
 text = "I might not be justice... but I. AM. INSANE!"
 out = "output.wav"
 
