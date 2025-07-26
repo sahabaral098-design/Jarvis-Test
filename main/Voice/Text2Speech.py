@@ -1,14 +1,19 @@
 from TTS.api import TTS
 
 speak_sample = "main/Voice/assets/Kira.wav"
-text = "I might not be justice... but I. AM. INSANE!"
-out = "output.wav"
 
-tts = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2").to("cpu")
-tts.tts_to_file(
-    text=text,
-        speaker_wav=speak_sample,
-            language="en",
-                file_path=out
-                )
-print(f" Done ")
+def test():
+    text = "I might not be justice... but I. AM. INSANE!"
+    out = "output.wav"
+
+    tts = TTS(model_name="tts_models/multilingual/multi-dataset/xtts_v2").to("cpu")
+    tts.tts_to_file(
+        text=text,
+            speaker_wav=speak_sample,
+                language="en",
+                    file_path=out
+                    )
+    print(f" Done ")
+
+if __name__ == "__main__":
+    test()
