@@ -1,3 +1,8 @@
 aiohttp
 aiofiles
 psutil
+coqui-tts
+torch
+numpy
+vosk
+SpeechRecognition 
