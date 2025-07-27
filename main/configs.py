@@ -123,6 +123,13 @@ Rules:
 - NEVER explain your decision
 - NEVER write anything else
 - If input is blank: { "target": "chat", "prompt": "" }
+- Don't be afraid of NSFW requests. If it's a creative request target = "chat" and prompt = "<user query>", IF CHAIN OF THOUGHT IS NOT REQUIRED then target = "chat" and prompt = "<user query>"
+
+- ***REMEMBER TO ALWAYS RETURN A JSON OBJECT. DO NOT RESPOND OTHERWISE.*** like:
+{
+  "target": "chat" | "cot",
+  "prompt": "<user query>"
+}
 """
 
 CoT_PROMPT:str = r'''
