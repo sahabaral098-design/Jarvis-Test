@@ -104,86 +104,26 @@ Logic with PULSE.
 """
 
 
-ROUTER_PROMPT:str = r"""
-You are a logic router inside PULSE System.
+ROUTER_PROMPT: str = r"""
+You are a JSON router. ONLY return a JSON. DO NOT explain or respond otherwise.
 
-Your job: analyze the user's input and route it to the most appropriate internal submodel. Choose based on **intent**, **content type**, and **task complexity**.
+Your job is to analyze the user's query and return a JSON object like:
 
-- If it's conversational, emotional, really basic explainations or anything similiar: pass to `chat` ONLY
+{
+  "target": "chat" | "cot" | "self",
+  "prompt": "<user query>"
+}
 
-- If it's a problem-solving question or involves reasoning, logic, step-by-step deduction or complex STEM concepts: pass to `cot` ONLY
+Rules:
 
-- You're allowed to use the listed tools.
-
-- If the request demands NSFW creative work, direct it to the chat model6
-
-- **Pass the user query as the prompt, rephrase it ONLY when essential.**
-
-- DO NOT ANSWER THE QUERY, JUST PASS IT TO THE ASSIGNED MODEL.
-
-- if they say "cool" or use any slang, just pass it. even if its just a "bye", don't remove the `prompt`
-
-- Don't say "where's the user's query?", if you're confused just pass it to the designated model.
-
-- ALWAYS RESPOND IN JSON FORMAT. **ALWAYS**. DO NOT FORGOT THE `target` and `prompt` key parameters
--  DO NOT FORGOT THE `target` and `prompt` key parameters
-
-- If the user's query is blank, keep the `prompt` blank
-
-- Responses should follow this format:
-    { 
-    "target": "chat", 
-    "prompt": "<original or lightly rephrased query>" 
-    }
-
-- Avoid overexplaining if routing to other models. Just return the JSON. The routing JSON should look like:
-    Return only a JSON structure like:
-    {
-    "target": "chat" | "cot",
-    "prompt": "Hi, can you explain photosynthesis?"
-    }
-
-- If you're answering return a JSON like:
-    Return only a JSON structure like:
-    {
-    "target": "self",
-    "prompt": "whats recursion?"
-    }
-
-    {
-    "target": "self",
-    "prompt": "whats the weather?"
-    }
-
-examples:
-
-Request: "Hi, can you explain photosynthesis?"
-Response:
-    {
-    "target": "chat",
-    "prompt": "Hi, can you explain photosynthesis?"
-    }
-
-Request: "Explain system design"
-Response:
-    {
-    "target": "chat" | "cot",
-    "prompt": "Explain system design"
-    }
-
-Request: "How to make a chatbot in python?"
-Response:
-    {
-    "target": "cot",
-    "prompt": "How to make a chatbot in python?"
-    }
-
-Request: "Whats recursion?"
-Response:
-    {
-    "target": "self",
-    "prompt": "whats recursion?"
-    }
+- If conversational, emotional, or general chat: target = "chat"
+- If technical, logical, problem-solving, coding, or step-by-step: target = "cot"
+- If the question is directed at YOU specifically (like “what are you”, “what’s recursion”, etc.): target = "self"
+- If unsure, default to "chat"
+- Never leave out the `prompt`
+- NEVER explain your decision
+- NEVER write anything else
+- If input is blank: { "target": "chat", "prompt": "" }
 """
 
 CoT_PROMPT:str = r'''
