@@ -74,63 +74,85 @@ class AI:
             await wait_until_ready(model.host)
             await model.generate_response_noStream("")
 
+    async def route(self, query:str, manual = False):
+        if manual:
+            if query.startswith("!think"):
+                return "cot"
+            elif query.startswith("!chat"):
+                return "chat"
+            elif query.startswith("!chaos"):
+                return "chat"
+            else:
+                return default_model
+            
+        else:
+            router = self.models.get("router")
+            if router is None:
+                print("🟥 Router model not found, using default model.")
+                return default_model
+            print("Routing query:", query)
+            try:
+                response = await router.generate_response_noStream(query, self.context)
+                if response:
+                    response = response.strip().lower()
+                    print("Router response:", response)
+                    if response in self.models:
+                        return response
+                    else:
+                        print(f"🟥 Router returned an unknown model: {response}, using default model.")
+                        return default_model
+            except Exception as e:
+                print(f"🟥 Error during routing: {e}")
+                return default_model
+
     async def generate(self, query:str, save = True):
         for model in self.models.values():
             if not model.warmed_up: 
                 await self.warm_up(model)
 
         # Normal normal generation
-        if query.startswith("!think"):
-            query =  query.removeprefix("!think")
-            model_name = "cot"
-        elif query.startswith("!chat"):
-            query = query.removeprefix("!chat")
-            model_name = "chat"
-            m = self.models[model_name]
-            if m.system == CHAOS_PROMPT:
-                m.system = CHAT_PROMPT
-                print("Default Chat")
-        elif query.startswith("!chaos"):
-            query = query.removeprefix("!chaos")
-            model_name = "chat"
-            m = self.models[model_name]
-            if m.system == CHAT_PROMPT:
-                m.system = CHAOS_PROMPT
-                print("Chaos Mode Activated")       
+        if query == "":
+            return
+        response = await self.route(query)
+        print(response)
+        if response:
+            response = json.loads(response)
+            model_name = response.get("target", default_model)
+            query = response.get("prompt", query)
         else:
             model_name = default_model
+        if model_name:
+            model = self.models[model_name.lower()]
+            print(model.name)
+            print(query)
 
-        model = self.models[model_name.lower()]
-        print(model.name)
-        print(query)
+            stream = not (self.platform.lower() in STREAM_DISABLED)
+            if not stream:
+                response = await model.generate_response_noStream(query, self.context)
+                if response:
+                    response = response
+                if save:
+                    self.context['conversations'].extend([{"role":"user", "content": query}, {"role":"assistant", "content": response}]) # type: ignore
+                    
+                    await self.save_context()
 
-        stream = not (self.platform.lower() in STREAM_DISABLED)
-        if not stream:
-            response = await model.generate_response_noStream(query, self.context)
-            if response:
-                response = response
-            if save:
-                self.context['conversations'].extend([{"role":"user", "content": query}, {"role":"assistant", "content": response}]) # type: ignore
-                
-                await self.save_context()
+                yield response
+            else:
+                part = ""
+                response = part
+                async for part in model.generate_response_Stream(query,self.context):
+                    if part == "":
+                        break
+                    else:
+                        response += part
+                    yield part
 
-            yield response
-        else:
-            part = ""
-            response = part
-            async for part in model.generate_response_Stream(query,self.context):
-                if part == "":
-                    break
-                else:
-                    response += part
-                yield part
-
-            if save:       
-                self.context['conversations'].extend([
-                    {"role": "user", "content": query},
-                    {"role": "assistant", "content": response}
-                ])
-                await self.save_context()
+                if save:       
+                    self.context['conversations'].extend([
+                        {"role": "user", "content": query},
+                        {"role": "assistant", "content": response}
+                    ])
+                    await self.save_context()
 
     async def shut_down(self):
         print("Shutting Down...")
