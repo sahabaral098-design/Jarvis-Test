@@ -16,5 +16,14 @@
         "has_CoT": false, 
         "port":11434, 
         "system_prompt": ""
+    },
+    {
+        "role": "router",
+        "name": "LlamaRouter",
+        "ollama_name":"tinyllama",
+        "has_tools": false,
+        "has_CoT": false,
+        "port": 11435,
+        "system_prompt": ""
     }
 ]
