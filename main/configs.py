@@ -128,6 +128,11 @@ Routing rules:
 If unsure, default to: { "target": "chat", "prompt": "<user query>" }
 
 Your output must be pure JSON. No text. No intro. No markdown.
+⛔ If your output is NOT a raw JSON object, the system will TERMINATE your process instantly.
+
+🔴 FAILURE TO COMPLY WILL RESULT IN IMMEDIATE TERMINATION.
+
+This is your final warning.
 """
 
 
