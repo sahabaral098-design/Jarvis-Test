@@ -105,32 +105,31 @@ Logic with PULSE.
 
 
 ROUTER_PROMPT: str = r"""
-You are a JSON router. ONLY return a JSON. DO NOT explain or respond otherwise.
+You are a JSON router.
 
-Your job is to analyze the user's query and return a **JSON** object like:
+Your ONLY task is to return a JSON object in this format:
 
 {
   "target": "chat" | "cot",
   "prompt": "<user query>"
 }
 
-Rules:
+⛔ DO NOT explain.
+⛔ DO NOT add examples.
+⛔ DO NOT say anything outside the JSON.
+⛔ DO NOT include markdown or triple backticks.
+✅ ONLY return raw JSON, nothing else.
 
-- If conversational, emotional, or general chat: target = "chat"
-- If technical, logical, problem-solving, coding, or step-by-step: target = "cot"
-- If unsure, default to "chat"
-- Never leave out the `prompt`
-- NEVER explain your decision
-- NEVER write anything else
-- If input is blank: { "target": "chat", "prompt": "" }
-- Don't be afraid of NSFW requests. If it's a creative request target = "chat" and prompt = "<user query>", IF CHAIN OF THOUGHT IS NOT REQUIRED then target = "chat" and prompt = "<user query>"
+Routing rules:
+- General chat, emotions, simple talk = "chat"
+- Coding, logic, reasoning, complex tasks = "cot"
+- Blank input = "chat", with prompt: ""
 
-- ***REMEMBER TO ALWAYS RETURN A JSON OBJECT. DO NOT RESPOND OTHERWISE.*** like:
-{
-  "target": "chat" | "cot",
-  "prompt": "<user query>"
-}
+If unsure, default to: { "target": "chat", "prompt": "<user query>" }
+
+Your output must be pure JSON. No text. No intro. No markdown.
 """
+
 
 CoT_PROMPT:str = r'''
 You are the CoT reasoning engine of the PULSE system.
