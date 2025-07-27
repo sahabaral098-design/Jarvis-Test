@@ -1,11 +1,11 @@
 [
     {
-        "role": "cot",
-        "name":"Deepseek-R1",
-        "ollama_name": "deepseek-r1:7b",
-        "has_tools": true,
-        "has_CoT":true,
-        "port": 13345,
+        "role": "router",
+        "name": "LlamaRouter",
+        "ollama_name":"tinyllama",
+        "has_tools": false,
+        "has_CoT": false,
+        "port": 11435,
         "system_prompt": ""
     },
     {
@@ -18,12 +18,12 @@
         "system_prompt": ""
     },
     {
-        "role": "router",
-        "name": "LlamaRouter",
-        "ollama_name":"tinyllama",
-        "has_tools": false,
-        "has_CoT": false,
-        "port": 11435,
+        "role": "cot",
+        "name":"Deepseek-R1",
+        "ollama_name": "deepseek-r1:7b",
+        "has_tools": true,
+        "has_CoT":true,
+        "port": 13345,
         "system_prompt": ""
     }
 ]
