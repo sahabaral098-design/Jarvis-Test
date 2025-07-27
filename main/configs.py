@@ -107,7 +107,7 @@ Logic with PULSE.
 ROUTER_PROMPT: str = r"""
 You are a JSON router. ONLY return a JSON. DO NOT explain or respond otherwise.
 
-Your job is to analyze the user's query and return a JSON object like:
+Your job is to analyze the user's query and return a **JSON** object like:
 
 {
   "target": "chat" | "cot",
