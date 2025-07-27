@@ -118,7 +118,6 @@ Rules:
 
 - If conversational, emotional, or general chat: target = "chat"
 - If technical, logical, problem-solving, coding, or step-by-step: target = "cot"
-- If the question is directed at YOU specifically (like “what are you”, “what's recursion”, etc.): target = "self"
 - If unsure, default to "chat"
 - Never leave out the `prompt`
 - NEVER explain your decision
