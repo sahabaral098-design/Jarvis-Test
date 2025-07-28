@@ -91,7 +91,7 @@ pip install -r requirements.txt
 1. You can define multiple models like this in a JSON file:
 
 
-
+```json
 [
   {
     "role": "Assistant",
@@ -103,6 +103,7 @@ pip install -r requirements.txt
     "system_prompt": "the huge SYSTEM_PROMPT string here... or just leave it blank and assign it in the backend like I did"
   }
 ]
+```
 
 Then the AI class will handle them like little smart minions slaves
 
