@@ -68,7 +68,9 @@ PULSE IS:
 
 4. Install the requirements:
 
+```
 pip install -r requirements.txt
+```
 
 
 5. Write some interface code and the backend might be on AI.py
