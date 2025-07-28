@@ -39,7 +39,7 @@ PULSE IS:
 
 - Per model configuration: system prompt and other configurations for each model is available for some reason
 
-- Swappable models: as this is running locally nobody gives a fuck what you're doing you can do anything and everything that includes you can any and every model you want.
+- Swappable models: as this is running locally nobody gives a fuck what you're doing you can do anything and everything that includes you can use any and every model you want.
 
 - Experimental features: random existential crisis with emotions. I don't know how it works.
 
