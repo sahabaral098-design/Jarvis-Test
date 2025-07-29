@@ -116,6 +116,8 @@ Then the AI class will handle them like little smart minions slaves
 
 - Vision
 
+- Agentic mode
+
 - Caffeine
 
 - Sleep
