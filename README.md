@@ -68,7 +68,7 @@ PULSE IS:
 
 4. Install the requirements:
 
-```
+```bash
 pip install -r requirements.txt
 ```
 
@@ -112,11 +112,11 @@ Then the AI class will handle them like little smart minions slaves
 
 # Future plans:
 
-- Voice I/O (WIP)
+- Voice I/O
 
 - Vision
 
-- Agentic mode
+- Agentic mode (because why the hell not)
 
 - Caffeine
 
