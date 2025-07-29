@@ -133,10 +133,10 @@ I'm not interested in giving my data and money to OpenAI and Google
 
 A transformer has:
 
-1. **ENCODER**: IT ENCODES THE DATA (IMGS TEXT AUDIO AND EVERY SINGLE DATA TYPE KNOWN TO MANKIND) INTO LIST OF NUMBERS, why? bcuz somewhere in the past, computer said to number: "I love you <3" and rest is history, THE ENCODER FOR SOME APPERANT REASON ALSO LEARNS LIKE (not really) THE ACTUAL MODEL (how? idk), why? only to "learn" the relation between words.. like thats the model's work
+1. **ENCODER**: IT ENCODES THE DATA (IMGS TEXT AUDIO AND EVERY SINGLE DATA TYPE KNOWN TO MANKIND) INTO LIST OF NUMBERS, why? bcuz somewhere in the past, computer said to number: "I love you <3" and rest is history, THE ENCODER FOR SOME APPARANT REASON ALSO LEARNS LIKE (not really) THE ACTUAL MODEL (how? idk), why? only to "learn" the relation between words.. like thats the model's work
 
 
-2. **DECODER**: ITS THE TWIN BROTHER OF ENCODER BUT DOES THE EXACT OPPOSITE, IT CONVERTS THE ARAY OF NUMBERS PUKED BY THE MODEL AND CONVERTS THEM INTO THE DESIRED DATA TYPE (IMGS TEXT AUDIO AND EVERY SINGLE DATA TYPE KNOWN TO MANKIND), FOR SOME REASON IT ALSO "learns" PATTERN, away from the encoder i assume, (and if they share the same patterns why dont use the same learnt vocab for both)
+2. **DECODER**: ITS THE TWIN BROTHER OF ENCODER BUT DOES THE EXACT OPPOSITE, IT CONVERTS THE ARRAY OF NUMBERS PUKED BY THE MODEL AND CONVERTS THEM INTO THE DESIRED DATA TYPE (IMGS TEXT AUDIO AND EVERY SINGLE DATA TYPE KNOWN TO MANKIND), FOR SOME REASON IT ALSO "learns" PATTERN, away from the encoder i assume, (and if they share the same patterns why dont use the same learnt vocab for both)
 
 
 3. **THE ACTUAL MODEL**: THIS PIECE OF SHIT HAS SOME COOL MATHS GOING ON, it eats the numbers from the encoder, does the digestion process and pukes the digested shit out to the decoder, and the digestive system consists of:
@@ -160,7 +160,7 @@ the model takes the formed "thing" and predicts what should come next using prob
 1. **TOKENISATION**: breaks the input into smaller words (ex: i eat dirt => [i, eat, dirt]) or subwords (ex: cinematic universe -> [cinema, tic, uni, verse] . SPOILER: thisishowllmscanreadthistexts
 
 
-2. **Positional embedding**: as llms are just math equations thriwing psedu random predictions (and ironically replacing humans) it lacks the basic understanding of positions thus we need to yet another matrix just for the sake of GPS and sanity. Otherwise to a llm "I eat grass" is same as "eat i grass"
+2. **Positional embedding**: as llms are just math equations throwing pseudo-random predictions (and ironically replacing humans) it lacks the basic understanding of positions thus we need to yet another matrix just for the sake of GPS and sanity. Otherwise to a llm "I eat grass" is same as "eat i grass"
 
 
 3. **Etc**: it's not over yet i just lack the knowledge and too lazy to search it
