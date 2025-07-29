@@ -2,7 +2,7 @@ aiohttp
 aiofiles
 psutil
 coqui-tts
-torch
+pyaudio
 numpy
 vosk
 SpeechRecognition 
