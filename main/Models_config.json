@@ -1,8 +1,8 @@
 [
     {
         "role": "router",
-        "name": "LlamaRouter",
-        "ollama_name":"tinyllama",
+        "name": "Router",
+        "ollama_name":"smollm2",
         "has_tools": false,
         "has_CoT": false,
         "port": 11435,
