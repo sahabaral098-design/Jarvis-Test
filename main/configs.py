@@ -126,6 +126,7 @@ Routing rules:
 - Blank input = "chat", with prompt: ""
 
 If unsure, default to: { "target": "chat", "prompt": "<user query>" }
+dont respond with anything else but the json dictionary.
 
 Your output must be pure JSON. No text. No intro. No markdown.
 ⛔ If your output is NOT a raw JSON object, the system will TERMINATE your process instantly.
