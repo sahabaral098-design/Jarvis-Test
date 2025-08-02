@@ -97,7 +97,8 @@ class AI:
             try:
                 response = await router.generate_response_noStream(query, self.context)
                 if response:
-                    response = response.strip().lower()
+                    response = response.strip()
+                    response= json.loads(response)
                     print("Router response:", response)
                     if response in self.models:
                         return response
