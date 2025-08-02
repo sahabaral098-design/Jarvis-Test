@@ -79,8 +79,11 @@ class AI:
             if query.startswith("!think"):
                 return "cot"
             elif query.startswith("!chat"):
+                self.models["chat"].system = CHAT_PROMPT
                 return "chat"
             elif query.startswith("!chaos"):
+                self.models["chat"].system = CHAOS_PROMPT
+                print("chaos")
                 return "chat"
             else:
                 return default_model
