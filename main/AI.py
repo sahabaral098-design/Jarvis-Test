@@ -118,7 +118,7 @@ class AI:
         if query == "":
             return
         response = await self.route(query)
-        print(response)
+        print("router: " , response)
         if response:
             response = json.loads(response)
             model_name = response.get("target", default_model)
