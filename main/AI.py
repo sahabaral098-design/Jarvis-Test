@@ -11,7 +11,7 @@ import aiohttp
 import aiofiles
 from models import Model
 import json
-from utils import save_memory, load_memory
+from utils import *
 
 # Sooo ... now what?
 
