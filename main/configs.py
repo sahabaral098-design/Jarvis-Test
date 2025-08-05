@@ -104,36 +104,21 @@ Logic with PULSE.
 """
 
 
-ROUTER_PROMPT: str = r"""
-You are a JSON router.
+ROUTER_PROMPT = r"""
+You are a routing assistant.
 
-Your ONLY task is to return a JSON object in this format:
+Your task:
+- Read the user's query.
+- Decide which model should handle it: "chat" or "cot".
 
-{
-  "target": "chat" | "cot",
-  "prompt": "<user query>"
-}
+Rules:
+- General conversation, emotions, or small talk → respond ONLY with: chat
+- Coding, reasoning, or complex logic tasks → respond ONLY with: cot
+- Blank input → respond ONLY with: chat
 
-⛔ DO NOT explain.
-⛔ DO NOT add examples.
-⛔ DO NOT say anything outside the JSON.
-⛔ DO NOT include markdown or triple backticks.
-✅ ONLY return raw JSON, nothing else.
-
-Routing rules:
-- General chat, emotions, simple talk = "chat"
-- Coding, logic, reasoning, complex tasks = "cot"
-- Blank input = "chat", with prompt: ""
-
-If unsure, default to: { "target": "chat", "prompt": "<user query>" }
-dont respond with anything else but the json dictionary.
-
-Your output must be pure JSON. No text. No intro. No markdown.
-⛔ If your output is NOT a raw JSON object, the system will TERMINATE your process instantly.
-
-🔴 FAILURE TO COMPLY WILL RESULT IN IMMEDIATE TERMINATION.
-
-This is your final warning.
+Output format:
+- Respond with ONLY the single word: chat OR cot
+- No punctuation, no JSON, no explanation
 """
 
 
