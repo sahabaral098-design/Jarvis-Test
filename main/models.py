@@ -20,6 +20,13 @@ class Model:
         self.ollama_env = os.environ.copy()
         self.ollama_env["OLLAMA_HOST"] = self.host
         
+        self.process = subprocess.Popen(
+                self.start_command, 
+                env=self.ollama_env, 
+                stdout=subprocess.DEVNULL, 
+                # stderr=subprocess.STDOUT
+            )
+
         self.warmed_up = False
 
         self.session = None
@@ -28,6 +35,7 @@ class Model:
     async def warm_up(self):
         print(f"🟨 [INFO] {self.name}({self.ollama_name}) warming up...")
         print("Trying Non-Streaming...")
+
         data = {
             "model": self.ollama_name,
             "messages": [{"role": "system", "content": self.system},{"role": "user", "content": "hi"}],

@@ -38,7 +38,6 @@ class AI:
         self.context_path = context_path
         self.memory_path = memory_path
         self.models :dict[str,Model] = dict()
-        self.processes:list[subprocess.Popen] = []
 
         self.tools = [
              None
@@ -68,9 +67,6 @@ class AI:
                 continue
 
     async def warm_up(self, model:Model):
-            self.processes.append(subprocess.Popen(
-                model.start_command, env=model.ollama_env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
-            ))
             await wait_until_ready(model.host)
             await model.generate_response_noStream("")
 
@@ -160,11 +156,10 @@ class AI:
 
     async def shut_down(self):
         print("Shutting Down...")
-        for p in self.processes:
-            p.terminate()
         for model in self.models.values():
             if model.session is not None:
                 await model.session.close()
+        model.process.terminate()  # type: ignore
         
         await self.save_context()
         print("Done.")
