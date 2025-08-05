@@ -120,9 +120,7 @@ class AI:
         response = await self.route(query)
         print("router: " , response)
         if response:
-            response = json.loads(response)
-            model_name = response.get("target", default_model)
-            query = response.get("prompt", query)
+            model_name = response 
         else:
             model_name = default_model
         if model_name:
