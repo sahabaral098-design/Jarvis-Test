@@ -1,14 +1,21 @@
 import requests
 from datetime import datetime
 import asyncio
+import aiofiles
 import json
 from spin import Spinner
 
-def save_memory():
-    pass
+async def log(message: str, level, log_file: str = "main/logs/log.txt"):
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    emoji = {
+        "info": "ℹ️",
+        "warning": "⚠️",
+        "error": "🟥",
+        "success": "✅"
+    }.get(level, "")
+    async with aiofiles.open(log_file, "a") as f:
+        await f.write(f"{emoji} [{level}] {message} - [{timestamp}]\n")
 
-def load_memory():
-    pass
 
 async def main():
     s = Spinner("⚙️  Spinning up Pulse AI...")
