@@ -5,7 +5,7 @@ import aiofiles
 import json
 from spin import Spinner
 
-async def log(message: str, level, log_file: str = "main/logs/log.txt"):
+async def log(message: str, level, log_file: str = "main/logs/log.txt", append = True):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     emoji = {
         "info": "ℹ️",
@@ -13,7 +13,7 @@ async def log(message: str, level, log_file: str = "main/logs/log.txt"):
         "error": "🟥",
         "success": "✅"
     }.get(level, "")
-    async with aiofiles.open(log_file, "a") as f:
+    async with aiofiles.open(log_file, "a" if append else "w") as f:
         await f.write(f"{emoji} [{level}] {message} - [{timestamp}]\n")
 
 
