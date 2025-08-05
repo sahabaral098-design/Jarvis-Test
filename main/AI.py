@@ -11,7 +11,7 @@ import aiohttp
 import aiofiles
 from models import Model
 import json
-from utils import *
+from utils import log
 
 # Sooo ... now what?
 
