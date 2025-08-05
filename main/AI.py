@@ -98,9 +98,9 @@ class AI:
                 response = await router.generate_response_noStream(query, self.context)
                 if response:
                     response = response.strip()
-                    response= json.loads(response)
+                    # response= json.loads(response)
                     print("Router response:", response)
-                    if response in self.models:
+                    if response in self.models.keys():
                         return response
                     else:
                         print(f"🟥 Router returned an unknown model: {response}, using default model.")
