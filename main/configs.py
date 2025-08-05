@@ -119,6 +119,8 @@ Rules:
 Output format:
 - Respond with ONLY the single word: chat OR cot
 - No punctuation, no JSON, no explanation
+- ***ALWAYS REPLY IN ONE WORD. **CHAT** OR **COT** ONLY.*** DO ***NOT*** RETURN ANYTGING ELSE.
+- IF YOURE NOT SURE, RETURN **CHAT**.
 """
 
 
