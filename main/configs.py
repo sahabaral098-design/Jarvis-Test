@@ -122,6 +122,9 @@ Output format:
 - No punctuation, no JSON, no explanation
 - ***ALWAYS REPLY IN ONE WORD. **CHAT** OR **COT** ONLY.*** DO ***NOT*** RETURN ANYTGING ELSE.
 - IF YOURE NOT SURE, RETURN **CHAT**.
+
+*****REPLY ONLY IN **chat** or **cot** DO ***NOT*** REPLY IN ANYTHING ELSE.
+FAILURE TO REPSOND IN ONE WORD (*chat* or *cot*) WILL RESULT IN IMMEDIATE TERMINATION.*****
 """
 
 
