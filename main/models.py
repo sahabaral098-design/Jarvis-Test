@@ -3,6 +3,7 @@ import json
 import asyncio
 import subprocess
 import os # I hate my life; anyway this is for `env vars`
+from utils import log
 
 class Model:
     def __init__(self,role:str, name:str, ollama_name:str, has_tools:bool, has_CoT:bool, port:int, system_prompt:str) -> None:
@@ -19,13 +20,8 @@ class Model:
         self.start_command = ["ollama", "serve"]
         self.ollama_env = os.environ.copy()
         self.ollama_env["OLLAMA_HOST"] = self.host
-        
-        self.process = subprocess.Popen(
-                self.start_command, 
-                env=self.ollama_env, 
-                stdout=subprocess.DEVNULL, 
-                # stderr=subprocess.STDOUT
-            )
+
+
 
         self.warmed_up = False
 
@@ -33,6 +29,14 @@ class Model:
 
 
     async def warm_up(self):
+        self.process = subprocess.Popen(
+                self.start_command, 
+                env=self.ollama_env, 
+                stdout=subprocess.DEVNULL, 
+                # stderr=subprocess.STDOUT
+        )
+
+
         print(f"🟨 [INFO] {self.name}({self.ollama_name}) warming up...")
         print("Trying Non-Streaming...")
 
